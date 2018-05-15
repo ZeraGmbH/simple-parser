@@ -9,10 +9,10 @@ Protocol rules:
 * Allow one pending request only. Sending a second request while
   another is pending is treated as error
 * Commands have a name and optional parameters. Fields are separated by ','
-* A command executed successfully responds with: <command-name>,OK,<optional-data>
-* A failed command responds with <command-name>,ERROR,<optional-error-desctiption>
+* A command executed successfully responds with: \<command-name\>,OK,\<optional-data\>
+* A failed command responds with \<command-name\>,ERROR,\<optional-error-description>
 * Command names a not case sensitive
-* Commands and responses are terminated by linfeed ("\n")
+* Commands and responses are terminated by linefeed ("\n")
 * Carriage return characters ("\r") are ignored
 * For parameters the following data types are supported:
   * BOOL: 1/0
@@ -22,13 +22,15 @@ Protocol rules:
   * STRING: A printable string
 
 
-Examples:
-PreparePLC,1,AbandWaveform.txt,0.872
-PreparePLC,OK
-StartPLC,PLC.ini
-StartPLC,ERROR: Wrong number of parameters
-StartPLC,1,PLC.ini
-StartPLC,OK,1.223
+Example I/O:
+```
+--> PreparePLC,1,AbandWaveform.txt,0.872
+<-- PreparePLC,OK
+--> StartPLC,PLC.ini
+<-- StartPLC,ERROR: Wrong number of parameters
+--> StartPLC,1,PLC.ini
+<-- StartPLC,OK,1.223
+```
 
 Usage:
 * QT += simple-parser in <your-project>.pro 
