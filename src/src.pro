@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS = cmd-io
+SUBDIRS = simple_cmdio

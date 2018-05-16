@@ -33,4 +33,4 @@ Example I/O:
 ```
 
 Usage:
-* QT += simple-parser in <your-project>.pro 
+* QT += simple_cmdio in <your-project>.pro 
