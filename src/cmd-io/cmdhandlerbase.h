@@ -4,13 +4,13 @@
 #include "cmdparserbase.h"
 #include <QObject>
 
-// class CmdHandlerBase
-class CmdHandlerBase : public QObject
+// class SimpleCmdHandlerBase
+class SimpleCmdHandlerBase : public QObject
 {
     Q_OBJECT
 public:
-    explicit CmdHandlerBase(QObject *parent = 0);
-    virtual void StartCmd(CmdData *pCmd, QVariantList params) = 0;
+    explicit SimpleCmdHandlerBase(QObject *parent = 0);
+    virtual void StartCmd(SimpleCmdData *pCmd, QVariantList params) = 0;
 signals:
     void OperationFinish(bool bError, QString strMessage);
 

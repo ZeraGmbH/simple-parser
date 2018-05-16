@@ -1,5 +1,5 @@
 TARGET = QtSimpleParser
-QT = core
+QT = core network
 
 load(qt_module)
 

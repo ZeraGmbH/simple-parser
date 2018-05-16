@@ -2,68 +2,47 @@
 #include "cmdhandlerbase.h"
 #include <QCoreApplication>
 
-CmdData::CmdData(QString strDisplay, CmdParamTypeIdList ListParams, int CmdID, bool bLogCmd)
+SimpleCmdData::SimpleCmdData(QString strDisplay, CmdParamTypeIdList_t ListParams, int CmdID, bool bLogCmd) :
+    m_strDisplay(strDisplay), m_ListParams(ListParams), m_CmdID(CmdID), m_bLogCmd(bLogCmd)
 {
-    m_strDisplay = strDisplay;
-    m_ListParams = ListParams;
-    m_CmdID = CmdID;
-    m_bLogCmd = bLogCmd;
 }
 
-int CmdData::GetCmdID()
+int SimpleCmdData::GetCmdID()
 {
     return m_CmdID;
 }
 
-QString CmdData::GetDisplayStr()
+QString SimpleCmdData::GetDisplayStr()
 {
     return m_strDisplay;
 }
 
-bool CmdParserBase::m_bLogCmdGlobal = false;
+bool SimpleCmdParserBase::m_bLogCmdGlobal = false;
 
-CmdParserBase::CmdParserBase(QObject *parent) : QObject(parent)
+SimpleCmdParserBase::SimpleCmdParserBase(QObject *parent) :
+    QObject(parent), m_pCurrCmd(Q_NULLPTR), m_pCookie(Q_NULLPTR), m_pCmdHandler(Q_NULLPTR), m_bLogCmd(m_bLogCmdGlobal)
 {
-    m_pCurrCmd = Q_NULLPTR;
-    m_pCookie = Q_NULLPTR;
-    m_pCmdHandler = Q_NULLPTR;
-    m_ui16IPPort = 0;
-    m_bKillAfterNotification = false;
-    m_bLogCmd = m_bLogCmdGlobal;
 }
 
-void CmdParserBase::SetCmdHandler(CmdHandlerBase* pCmdHandler)
+void SimpleCmdParserBase::SetCmdHandler(SimpleCmdHandlerBase* pCmdHandler)
 {
     m_pCmdHandler = pCmdHandler;
-    m_KillTimer.setSingleShot(true);
-    connect(&m_KillTimer, &QTimer::timeout, this, &CmdParserBase::OnKillTimer);
-    connect(m_pCmdHandler, &CmdHandlerBase::OperationFinish, this, &CmdParserBase::OnOperationFinish, Qt::QueuedConnection);
+    connect(m_pCmdHandler, &SimpleCmdHandlerBase::OperationFinish, this, &SimpleCmdParserBase::OnOperationFinish, Qt::QueuedConnection);
 }
 
-void CmdParserBase::SetGlobalOutOfOrderMessage(QString strMessage, bool bKillAfterNotification)
+void SimpleCmdParserBase::SetGlobalOutOfOrderMessage(QString strMessage)
 {
     m_strGlobalOutOfOrderMessage = strMessage;
-    m_bKillAfterNotification = bKillAfterNotification;
 }
 
-void CmdParserBase::SetListenPort(quint16 ui16IPPort)
-{
-    m_ui16IPPort = ui16IPPort;
-}
-
-quint16 CmdParserBase::GetListenPort()
-{
-    return m_ui16IPPort;
-}
-
-bool CmdParserBase::GetCmdLog()
+bool SimpleCmdParserBase::GetCmdLog()
 {
     return m_bLogCmdGlobal && m_bLogCmd;
 }
 
-void CmdParserBase::SetCmdLog(bool bFullLog)
+void SimpleCmdParserBase::SetCmdLogGlobal(bool bLogCmdGlobal)
 {
-    m_bLogCmdGlobal = bFullLog;
+    m_bLogCmdGlobal = bLogCmdGlobal;
 }
 
 
@@ -73,12 +52,12 @@ void CmdParserBase::SetCmdLog(bool bFullLog)
   @param paramList [in] list of expected parameter types
   @param iCmdID [in] ID of decoded command
   */
-void CmdParserBase::AddCmdInfo(QString strCmd, CmdParamTypeIdList paramList, int iCmdID, bool bLogCmd)
+void SimpleCmdParserBase::AddCmdInfo(QString strCmd, CmdParamTypeIdList_t paramList, int iCmdID, bool bLogCmd)
 {
     QString strCmdUpp = strCmd.toUpper();
     if(!m_cmdList.contains(strCmdUpp))
     {
-        m_cmdList[strCmdUpp] = new CmdData(
+        m_cmdList[strCmdUpp] = new SimpleCmdData(
                     strCmd,
                     paramList,
                     iCmdID,
@@ -88,21 +67,12 @@ void CmdParserBase::AddCmdInfo(QString strCmd, CmdParamTypeIdList paramList, int
         qFatal("Cmd \"%s\" already inserted!", qPrintable(strCmd));
 }
 
-const QString CmdParserBase::PlausiCheck(CmdData *pCmd, const QVariantList& params)
+const QString SimpleCmdParserBase::PlausiCheck(SimpleCmdData *pCmd, const QVariantList& params)
 {
     Q_UNUSED( pCmd )
     Q_UNUSED( params )
     return QString();
 }
-
-const QString CmdParserBase::PlausiGetStatusCmd(CmdData *pCmd, const QVariantList &params)
-{
-    QString strRet;
-    if(params[0].toInt() < 0 || params[0].toInt() >= STATUS_QUERY_COUNT)
-        strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QLatin1String("Status type out of range!"));
-    return strRet;
-}
-
 
 /**
   @b Parse and start a command. If parsing succeeds our handler's StartCmd is called
@@ -110,7 +80,7 @@ const QString CmdParserBase::PlausiGetStatusCmd(CmdData *pCmd, const QVariantLis
   @param pCookie [in] Generic pointer wich will be part of the
   @returns (Error)Message - if empty we expended end on signal CmdFinish
   */
-const QString CmdParserBase::ParseAndStartCmd(QString strCmd, QIODevice *pCookie)
+const QString SimpleCmdParserBase::ParseAndStartCmd(QString strCmd, QIODevice *pCookie)
 {
     QString strRet;
     QStringList strCmdAndParamList = strCmd.split(QLatin1String(","));
@@ -120,7 +90,7 @@ const QString CmdParserBase::ParseAndStartCmd(QString strCmd, QIODevice *pCookie
         QString strCmdUpp = strCmdAndParamList[0].toUpper().trimmed();
         if(m_cmdList.contains(strCmdUpp))
         {
-            CmdData *cmdData = m_cmdList[strCmdUpp];
+            SimpleCmdData *cmdData = m_cmdList[strCmdUpp];
             // Check parameters
             if(strCmdAndParamList.count() == cmdData->m_ListParams.count() + 1)
             {
@@ -186,11 +156,7 @@ const QString CmdParserBase::ParseAndStartCmd(QString strCmd, QIODevice *pCookie
                                 m_pCmdHandler->StartCmd(cmdData, params);
                             }
                             else
-                            {
                                 strRet = FormatErrorMsg(cmdData->m_strDisplay, m_strGlobalOutOfOrderMessage);
-                                if(m_bKillAfterNotification && !m_KillTimer.isActive())
-                                    m_KillTimer.start(2000);
-                            }
                         }
                     }
                 }
@@ -211,7 +177,7 @@ const QString CmdParserBase::ParseAndStartCmd(QString strCmd, QIODevice *pCookie
   @b Fire final success notification here
   @param strReturn [in] In case the transaction reads data it is set here as ','-separated else error message
   */
-void CmdParserBase::OnOperationFinish(bool bError, QString strReturn)
+void SimpleCmdParserBase::OnOperationFinish(bool bError, QString strReturn)
 {
     QString strEmit;
     if(m_pCurrCmd)
@@ -234,7 +200,7 @@ void CmdParserBase::OnOperationFinish(bool bError, QString strReturn)
   @param strCmd [in] Name of command
   @param strErrDescription [in] Human readable error description
   */
-const QString CmdParserBase::FormatErrorMsg(QString strCmd, QString strErrDescription)
+const QString SimpleCmdParserBase::FormatErrorMsg(QString strCmd, QString strErrDescription)
 {
     return strCmd + QLatin1String(",ERROR: ") + strErrDescription;
 }
@@ -246,7 +212,7 @@ const QString CmdParserBase::FormatErrorMsg(QString strCmd, QString strErrDescri
   @param iMaxLen [in] maximum length of address
   @returns true if valid
   */
-bool CmdParserBase::isValidHexValue(QString strParam, int iMaxLen)
+bool SimpleCmdParserBase::isValidHexValue(QString strParam, int iMaxLen)
 {
     bool bValidAddress = true;
     // length
@@ -261,8 +227,18 @@ bool CmdParserBase::isValidHexValue(QString strParam, int iMaxLen)
     return bValidAddress;
 }
 
-void CmdParserBase::OnKillTimer()
+SimpleCmdParserSocketBase::SimpleCmdParserSocketBase() :
+    m_ui16IPPort(0)
 {
-    QCoreApplication::exit();
 }
 
+
+void SimpleCmdParserSocketBase::SetListenPort(quint16 ui16IPPort)
+{
+    m_ui16IPPort = ui16IPPort;
+}
+
+quint16 SimpleCmdParserSocketBase::GetListenPort()
+{
+    return m_ui16IPPort;
+}

@@ -3,6 +3,7 @@
 #define STR(s) _STR(s)
 #define _STR(s) #s
 
-CmdHandlerBase::CmdHandlerBase(QObject *parent) : QObject(parent)
+SimpleCmdHandlerBase::SimpleCmdHandlerBase(QObject *parent) :
+    QObject(parent)
 {
 }
