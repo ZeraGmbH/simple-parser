@@ -2,16 +2,17 @@
 #define SIMPLECMDCLIENT_H
 
 #include <QObject>
+#include "cmdiobase_global.h"
 
 class QTcpSocket;
-class SimpleCmdParserSocketBase;
+class QSimpleCmdParserSocketBase;
 class QIODevice;
 
-class SimpleCmdClient: public QObject
+class SIMPLE_CMDIO_EXPORT QSimpleCmdClient: public QObject
 {
     Q_OBJECT
 public:
-    SimpleCmdClient(QObject *parent, QTcpSocket* pSocket, SimpleCmdParserSocketBase* pCmdParser);
+    QSimpleCmdClient(QObject *parent, QTcpSocket* pSocket, QSimpleCmdParserSocketBase* pCmdParser);
 
 public slots:
     void OnReceive();
@@ -19,7 +20,7 @@ public slots:
 
 private:
     QTcpSocket* m_pSocket;
-    SimpleCmdParserSocketBase* m_pCmdParser;
+    QSimpleCmdParserSocketBase* m_pCmdParser;
     QString m_strCmdBuffer;
 };
 

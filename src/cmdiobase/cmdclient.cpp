@@ -2,14 +2,14 @@
 #include "cmdclient.h"
 #include "cmdparserbase.h"
 
-SimpleCmdClient::SimpleCmdClient(QObject *parent, QTcpSocket* pSocket, SimpleCmdParserSocketBase *pCmdParser) :
+QSimpleCmdClient::QSimpleCmdClient(QObject *parent, QTcpSocket* pSocket, QSimpleCmdParserSocketBase *pCmdParser) :
     QObject(parent), m_pSocket(pSocket), m_pCmdParser(pCmdParser)
 {
-    connect(m_pSocket, &QTcpSocket::readyRead, this, &SimpleCmdClient::OnReceive);
-    connect(m_pCmdParser, &SimpleCmdParserSocketBase::CmdFinish, this, &SimpleCmdClient::OnCmdFinish);
+    connect(m_pSocket, &QTcpSocket::readyRead, this, &QSimpleCmdClient::OnReceive);
+    connect(m_pCmdParser, &QSimpleCmdParserSocketBase::CmdFinish, this, &QSimpleCmdClient::OnCmdFinish);
 }
 
-void SimpleCmdClient::OnReceive()
+void QSimpleCmdClient::OnReceive()
 {
     QTcpSocket *pSocket = qobject_cast<QTcpSocket*>(sender());
     if(pSocket == m_pSocket)
@@ -41,7 +41,7 @@ void SimpleCmdClient::OnReceive()
     }
 }
 
-void SimpleCmdClient::OnCmdFinish(QString strCmdResponse, QIODevice *pCookie)
+void QSimpleCmdClient::OnCmdFinish(QString strCmdResponse, QIODevice *pCookie)
 {
     if(pCookie == m_pSocket)
     {

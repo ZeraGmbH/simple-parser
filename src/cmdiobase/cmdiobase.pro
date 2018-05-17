@@ -3,4 +3,4 @@ QT = core network
 
 load(qt_module)
 
-include($$PWD/simple_cmdio-lib.pri)
+include($$PWD/cmdiobase-lib.pri)

@@ -1,5 +1,5 @@
 %modules = (
-    "QtSimpleCmdIO" => "$basedir/src/simple_cmdio",
+    "QtSimpleCmdIO" => "$basedir/src/cmdiobase",
 );
 
 %dependencies = (
