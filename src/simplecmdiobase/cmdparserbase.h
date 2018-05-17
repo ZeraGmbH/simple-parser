@@ -8,7 +8,7 @@
 #define END_STR '\n'
 #define END_IGNORE '\r'
 
-#include "cmdiobase_global.h"
+#include "simplecmdiobase_global.h"
 
 // forwards
 class QSimpleCmdParserBase;

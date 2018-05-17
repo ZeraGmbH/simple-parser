@@ -1,6 +1,6 @@
 # Cause make to do nothing.
 TEMPLATE = subdirs
 
-CMAKE_QT_MODULES_UNDER_TEST = simple_cmdio
+CMAKE_QT_MODULES_UNDER_TEST = simplecmdiobase
 
 CONFIG += ctest_testcase

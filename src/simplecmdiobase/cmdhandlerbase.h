@@ -3,7 +3,7 @@
 
 #include "cmdparserbase.h"
 #include <QObject>
-#include "cmdiobase_global.h"
+#include "simplecmdiobase_global.h"
 
 // class QSimpleCmdHandlerBase
 class SIMPLE_CMDIO_EXPORT QSimpleCmdHandlerBase : public QObject

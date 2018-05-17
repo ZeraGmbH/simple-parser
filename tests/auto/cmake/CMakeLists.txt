@@ -9,5 +9,10 @@ find_package(Qt5Core REQUIRED)
 include("${_Qt5CTestMacros}")
 
 test_module_includes(
-  SimpleCmdIO QSimpleCmdIO
+  SimpleCmdClient QSimpleCmdClient
+  SimpleCmdServer QSimpleCmdServer
+  SimpleCmdHandlerBase QSimpleCmdHandlerBase
+  SimpleCmdParserBase QSimpleCmdParserBase
+  SimpleCmdParserSocketBase QSimpleCmdParserSocketBase
+  SimpleCmdHandlerBase QSimpleCmdHandlerBase
 )

@@ -33,4 +33,4 @@ Example I/O:
 ```
 
 Usage:
-* QT += simple_cmdio in <your-project>.pro 
+* QT += simplecmdiobase in <your-project>.pro 

@@ -2,7 +2,7 @@
 #define SIMPLECMDCLIENT_H
 
 #include <QObject>
-#include "cmdiobase_global.h"
+#include "simplecmdiobase_global.h"
 
 class QTcpSocket;
 class QSimpleCmdParserSocketBase;

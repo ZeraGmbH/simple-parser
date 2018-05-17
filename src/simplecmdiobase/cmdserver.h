@@ -4,7 +4,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include "cmdclient.h"
-#include "cmdiobase_global.h"
+#include "simplecmdiobase_global.h"
 
 class QSimpleCmdParserSocketBase;
 
