@@ -2,8 +2,8 @@
 #include "cmdhandlerbase.h"
 #include <QCoreApplication>
 
-SimpleCmdData::SimpleCmdData(QString strDisplay, CmdParamTypeIdList ListParams, int CmdID, bool bLogCmd) :
-    m_strDisplay(strDisplay), m_ListParams(ListParams), m_CmdID(CmdID), m_bLogCmd(bLogCmd)
+SimpleCmdData::SimpleCmdData(QString strDisplay, CmdParamTypeIdList ListParams, int CmdID, bool bLogCmd, QString strHelpAdd) :
+    m_strDisplay(strDisplay), m_ListParams(ListParams), m_CmdID(CmdID), m_bLogCmd(bLogCmd), m_strHelpAdd(strHelpAdd)
 {
 }
 
@@ -52,19 +52,22 @@ void QSimpleCmdParserBase::SetCmdLogGlobal(bool bLogCmdGlobal)
   @param paramList [in] list of expected parameter types
   @param iCmdID [in] ID of decoded command
   */
-void QSimpleCmdParserBase::AddCmdInfo(QString strCmd, CmdParamTypeIdList paramList, int iCmdID, bool bLogCmd)
+void QSimpleCmdParserBase::AddCmdInfo(QString strCmd, CmdParamTypeIdList paramList, int iCmdID, bool bLogCmd, QString strHelpAdd)
 {
     QString strCmdUpp = strCmd.toUpper();
-    if(!m_cmdList.contains(strCmdUpp))
+    if(strCmdUpp == QLatin1String("HELP"))
+        qFatal("Cmd \"%s\" is not allowed!", qPrintable(strCmd));
+    if(m_cmdList.contains(strCmdUpp))
+        qFatal("Cmd \"%s\" already inserted!", qPrintable(strCmd));
+    else
     {
         m_cmdList[strCmdUpp] = new SimpleCmdData(
                     strCmd,
                     paramList,
                     iCmdID,
-                    bLogCmd);
+                    bLogCmd,
+                    strHelpAdd);
     }
-    else
-        qFatal("Cmd \"%s\" already inserted!", qPrintable(strCmd));
 }
 
 const QString QSimpleCmdParserBase::PlausiCheck(SimpleCmdData *pCmd, const QVariantList& params)
@@ -88,7 +91,63 @@ const QString QSimpleCmdParserBase::ParseAndStartCmd(QString strCmd, QIODevice *
     if(strCmdAndParamList.count() > 0)
     {
         QString strCmdUpp = strCmdAndParamList[0].toUpper().trimmed();
-        if(m_cmdList.contains(strCmdUpp))
+        // Special Help command available for all parsers
+        if(strCmdUpp == QLatin1String("HELP"))
+        {
+            QString strDisplay = QLatin1String("HELP");
+            // Help does no accept params
+            if(strCmdAndParamList.count() == 1)
+            {
+                // Title
+                strRet += QLatin1String("--------------------------------------------------------------------------------\n");
+                strRet += QString(QLatin1String("Name: %1\n\n")).arg(GetParserName());
+                strRet += QLatin1String("--------------------------------------------------------------------------------\n");
+                // Sort commands
+                QMap<QString, SimpleCmdData*> cmdListSorted;
+                for(QHash<QString, SimpleCmdData*>::iterator iterCmd = m_cmdList.begin();
+                    iterCmd!=m_cmdList.end(); iterCmd++)
+                    cmdListSorted[iterCmd.key()] = iterCmd.value();
+                // Loop all commands
+                for(QMap<QString, SimpleCmdData*>::iterator iterCmdSorted = cmdListSorted.begin();
+                    iterCmdSorted!=cmdListSorted.end(); iterCmdSorted++)
+                {
+                    SimpleCmdData *cmdData = iterCmdSorted.value();
+                    strRet += QString(QLatin1String("Cmd: %1")).arg(cmdData->GetDisplayStr());
+                    CmdParamTypeIdList::iterator iterParam = cmdData->m_ListParams.begin();
+                    while(iterParam != cmdData->m_ListParams.end())
+                    {
+                        switch(*iterParam)
+                        {
+                        case PARAM_TYPE_BOOL:
+                            strRet += QLatin1String(",bool");
+                            break;
+                        case PARAM_TYPE_INT:
+                            strRet += QLatin1String(",int");
+                            break;
+                        case PARAM_TYPE_FLOAT:
+                            strRet += QLatin1String(",float");
+                            break;
+                        case PARAM_TYPE_STRING:
+                            strRet += QLatin1String(",string");
+                            break;
+                        }
+                        iterParam++;
+                    }
+                    strRet += QLatin1String("\n");
+                    if(!cmdData->m_strHelpAdd.isEmpty())
+                    {
+                        QString strIndent = QLatin1String("  ");
+                        QString strHelpAdd = cmdData->m_strHelpAdd;
+                        strHelpAdd = strHelpAdd.replace(QLatin1String("\n"), QLatin1String("\n")+strIndent);
+                        strRet += strIndent + QString(QLatin1String("%1\n")).arg(strHelpAdd);
+                    }
+                    strRet += QLatin1String("--------------------------------------------------------------------------------\n");
+                }
+            }
+            else
+                strRet = FormatErrorMsg(strDisplay, QLatin1String("Wrong number of parameters"));
+        }
+        else if(m_cmdList.contains(strCmdUpp))
         {
             SimpleCmdData *cmdData = m_cmdList[strCmdUpp];
             // Check parameters

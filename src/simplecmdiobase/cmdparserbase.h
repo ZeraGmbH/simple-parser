@@ -29,7 +29,7 @@ typedef QList<enum CmdParamTypeIds> CmdParamTypeIdList;
 class SIMPLE_CMDIO_EXPORT SimpleCmdData
 {
 public:
-    SimpleCmdData(QString strDisplay, CmdParamTypeIdList ListParams, int CmdID, bool bLogCmd);
+    SimpleCmdData(QString strDisplay, CmdParamTypeIdList ListParams, int CmdID, bool bLogCmd, QString strHelpAdd);
     int GetCmdID();
     QString GetDisplayStr();
 private:
@@ -37,6 +37,7 @@ private:
     CmdParamTypeIdList m_ListParams;
     int m_CmdID;
     bool m_bLogCmd;
+    QString m_strHelpAdd;
     friend class QSimpleCmdParserBase;
 };
 
@@ -46,7 +47,7 @@ class SIMPLE_CMDIO_EXPORT QSimpleCmdParserBase : public QObject
     Q_OBJECT
 public:
     explicit QSimpleCmdParserBase(QObject *parent = 0);
-    void AddCmdInfo(QString strCmd, CmdParamTypeIdList paramList, int iCmdID, bool bLogCmd=true); /* setup commands */
+    void AddCmdInfo(QString strCmd, CmdParamTypeIdList paramList, int iCmdID, bool bLogCmd=true, QString strHelpAdd = QString()); /* setup commands */
     const QString ParseAndStartCmd(QString strCmd, QIODevice *pCookie); /* return non-empty string if finished */
     void SetCmdHandler(QSimpleCmdHandlerBase* pCmdHandler);
     void SetGlobalOutOfOrderMessage(QString strMessage);
