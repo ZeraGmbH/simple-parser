@@ -266,9 +266,9 @@ const QString QSimpleCmdParserBase::FormatErrorMsg(QString strCmd, QString strEr
 
 
 /**
-  @b Check valid Hex addrress
+  @b Check valid Hex value
   @param strParam [in] Hex address value
-  @param iMaxLen [in] maximum length of address
+  @param iMaxLen [in] maximum string length of value
   @returns true if valid
   */
 bool QSimpleCmdParserBase::isValidHexValue(QString strParam, int iMaxLen)
