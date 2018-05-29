@@ -298,7 +298,7 @@ QByteArray QSimpleCmdParserBase::BinaryFromAscii(QString strParam)
     data = data.replace("\\n","\n");
     data = data.replace("\\r","\r");
     data = data.replace("\\t","\t");
-    data = data.replace("\\0",0);
+    data = data.replace((char*)"\\0",2,(char*)"\0",1);
     data = data.replace("\\;",",");
     return data;
 }
