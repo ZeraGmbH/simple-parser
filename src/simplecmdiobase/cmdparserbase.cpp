@@ -275,7 +275,7 @@ bool QSimpleCmdParserBase::isValidHexValue(QString strParam, int iMaxLen)
 {
     bool bValidAddress = true;
     // length
-    if((strParam.length() % 2) || strParam.length() > iMaxLen || strParam.length() <= 0)
+    if((strParam.length() % 2) || (iMaxLen > 0 && strParam.length() > iMaxLen) || strParam.length() <= 0)
         bValidAddress = false;
     // correct hex
     else
