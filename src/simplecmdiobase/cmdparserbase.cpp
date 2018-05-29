@@ -298,9 +298,19 @@ QByteArray QSimpleCmdParserBase::BinaryFromAscii(QString strParam)
     data = data.replace("\\n","\n");
     data = data.replace("\\r","\r");
     data = data.replace("\\t","\t");
-    data = data.replace("\\0","\0");
-    data = data.replace("\\,",",");
+    data = data.replace("\\0",0);
+    data = data.replace("\\;",",");
     return data;
+}
+
+/**
+  @b Help string for escape sequences and specials
+  @param strParam [in] ASCII Param
+  @returns Help string
+  */
+QString QSimpleCmdParserBase::BinaryConversionHelpString()
+{
+    return QLatin1String("Escapes: \'\\\\\' \'\\n\' \'\\r\' \'\\t\' Specials: \'\\0\' -> 0x00 \'\\;\' -> \',\'");
 }
 
 QSimpleCmdParserSocketBase::QSimpleCmdParserSocketBase(QObject *parent) :
