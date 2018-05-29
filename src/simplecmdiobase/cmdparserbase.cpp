@@ -286,6 +286,23 @@ bool QSimpleCmdParserBase::isValidHexValue(QString strParam, int iMaxLen)
     return bValidAddress;
 }
 
+/**
+  @b Convert ASCII to binary by replacing escape sequences
+  @param strParam [in] ASCII Param
+  @returns binary data
+  */
+QByteArray QSimpleCmdParserBase::BinaryFromAscii(QString strParam)
+{
+    QByteArray data = strParam.toLatin1();
+    data = data.replace("\\\\","\\");
+    data = data.replace("\\n","\n");
+    data = data.replace("\\r","\r");
+    data = data.replace("\\t","\t");
+    data = data.replace("\\0","\0");
+    data = data.replace("\\,",",");
+    return data;
+}
+
 QSimpleCmdParserSocketBase::QSimpleCmdParserSocketBase(QObject *parent) :
     QSimpleCmdParserBase(parent), m_ui16IPPort(0)
 {
