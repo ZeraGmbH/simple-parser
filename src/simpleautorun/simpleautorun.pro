@@ -1,7 +1,6 @@
 QT += core
 QT += network
 QT -= gui
-QT += simplecmdiobase
 
 TARGET = simpleautorun
 CONFIG += console
@@ -22,3 +21,6 @@ HEADERS += \
 
 target.path = /usr/bin
 INSTALLS += target
+
+INCLUDEPATH +=  ../simplecmdiobase
+LIBS += -L../../lib -lQt5SimpleCmdIO

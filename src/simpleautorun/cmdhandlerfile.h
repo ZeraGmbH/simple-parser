@@ -1,10 +1,10 @@
 #ifndef CMDHANDLERFILE_H
 #define CMDHANDLERFILE_H
 
+#include "cmdhandlerbase.h"
 #include <QList>
 #include <QMap>
 #include <QTcpSocket>
-#include <QSimpleCmdHandlerBase>
 
 class CmdHandlerFile : public QSimpleCmdHandlerBase
 {

@@ -1,7 +1,7 @@
 #ifndef CMDPARSERFILE_H
 #define CMDPARSERFILE_H
 
-#include <QSimpleCmdParserBase>
+#include "cmdparserbase.h"
 #include "cmdhandlerfile.h"
 
 enum CmdFILEIOCmdIds
