@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
 
     // option execution file
     QCommandLineOption optExecFile(QStringList() << "x" << "exec-file", "fill path execution file", "path");
-    optExecFile.setDefaultValue("/opt/zera/fmt/autoexec");
     parser.addOption(optExecFile);
 
     parser.process(a);
