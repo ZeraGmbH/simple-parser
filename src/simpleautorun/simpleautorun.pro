@@ -24,3 +24,7 @@ INSTALLS += target
 
 INCLUDEPATH +=  ../simplecmdiobase
 LIBS += -L../../lib -lQt5SimpleCmdIO
+
+exists(../../localpaths.user.pri) {
+    include(../../localpaths.user.pri)
+}
