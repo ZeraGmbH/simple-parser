@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS = simplecmdiobase
+SUBDIRS = simplecmdiobase simpleautorun
