@@ -1,5 +1,14 @@
 TEMPLATE = subdirs
 
-SUBDIRS = simplecmdiobase simpleautorun
+SUBDIRS = \
+    simplecmdiobase \
+    simpleautorun \
+    simpleexample
 
 simpleautorun.depends = simplecmdiobase
+simpleexample.depends = simplecmdiobase
+
+disableExample {
+    message(Buld example disabled)
+    SUBDIRS -= simpleexample
+}
