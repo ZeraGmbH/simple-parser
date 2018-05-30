@@ -66,7 +66,8 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             break;
         }
         case CMD_FILE_SET_TAG:
-            m_MapTags[params[0].toString().toUpper()] = m_iterCurrLine;
+            // +1: Do not repeat tag set on every run
+            m_MapTags[params[0].toString().toUpper()] = m_iterCurrLine+1;
             emit OperationFinish(false, "");
             break;
         case CMD_FILE_LOOP_TAG:
