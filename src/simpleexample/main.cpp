@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
         qInfo("In telnet session enter 'help<CR>' to get information on commands available");
     }
     else
-        qWarning("FPGA I/O server does not listen on %u", iPortNo);
+        qWarning("Could not start I/O server on %u", iPortNo);
 
     return a.exec();
 }
