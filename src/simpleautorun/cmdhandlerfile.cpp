@@ -1,6 +1,7 @@
 #include <QTimer>
 #include <QEventLoop>
 #include <QStringList>
+#include "commonhelpers.h"
 #include "cmdhandlerfile.h"
 #include "cmdparserfile.h"
 
@@ -28,7 +29,9 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             }
             else
             {
-                qInfo("IP connection %s:%i was opened successfully!", qPrintable(params[0].toString()), params[1].toInt());
+                LogMsg(QString("IP connection %1:%2 was opened successfully!")
+                       .arg(params[0].toString())
+                       .arg(params[1].toInt()));
                 m_listSockets.append(pNewSocket);
                 SelectSocket(pNewSocket);
                 emit OperationFinish(false, "");
@@ -41,7 +44,8 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             if(iConnectionNo < m_listSockets.count())
             {
                 SelectSocket(m_listSockets[iConnectionNo]);
-                qInfo("IP connection %i was selected successfully!", iConnectionNo);
+                LogMsg(QString("IP connection %1 was selected successfully!")
+                       .arg(iConnectionNo));
                 emit OperationFinish(false, "");
             }
             else
@@ -61,7 +65,6 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
             timer.start(params[0].toInt());
             loop.exec();
-            //qInfo("Waited %ims", params[0].toInt());
             emit OperationFinish(false, "");
             break;
         }
@@ -90,7 +93,8 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                         {
                             // remove loop
                             m_MapActiveLoops.remove(m_iterCurrLine);
-                            qInfo("All loops for target %s performd", qPrintable(params[0].toString()));
+                            LogMsg(QString("All loops for target %1 performed")
+                                   .arg(params[0].toString()));
                         }
                         else
                             // next loop
@@ -141,9 +145,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                             strReceived = strReceived.toUpper();
                         }
                         if(strExpected != strReceived)
-                        {
-                            strError = QString(QLatin1String("Last command check failed Expected \"%1\" / received \"%2\"")).arg(strExpected).arg(strReceived);
-                        }
+                            strError = QString("Last command check failed expected '%1' / received '%2'").arg(strExpected).arg(strReceived);
                     }
                 }
                 else
@@ -156,7 +158,8 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                     emit OperationFinish(true, strError);
                 else
                 {
-                    qWarning("Abort on check fail: %s", qPrintable(strError));
+                    LogMsg(QString("Abort on check fail: %1")
+                           .arg(strError));
                     emit kill(-1);
                 }
             }
@@ -171,13 +174,15 @@ void CmdHandlerFile::SendRemoteCmd(QByteArray Cmd)
 {
     if(m_pCurrSocket)
     {
+        LogMsg(QString("--- EXTERNAL BEGIN ---"));
+        LogMsg(Cmd);
         // Avoid drop through recent command respones
         m_strLastReceivedExternal.clear();
         m_pCurrSocket->write(Cmd + END_STR);
     }
     else
     {
-        qWarning("No connection to server established!");
+        LogMsg(QString("No connection to server established!"));
         emit kill(-1);
     }
 }
@@ -209,13 +214,14 @@ void CmdHandlerFile::OnReceive()
     if(m_pCurrSocket)
     {
         m_strLastReceivedExternal = m_pCurrSocket->readAll();
-        qInfo(qPrintable(m_strLastReceivedExternal));
         m_strLastReceivedExternal.replace("\n", "");
+        LogMsg(m_strLastReceivedExternal);
+        LogMsg(QString("--- EXTERNAL END -----"));
         if(!m_bStopOnExternalError || !m_strLastReceivedExternal.toUpper().contains(",ERROR"))
             emit cmdFinish();
         else
         {
-            qWarning("Abort on external error!");
+            LogMsg(QString("Abort on external error!"));
             emit kill(-1);
         }
     }

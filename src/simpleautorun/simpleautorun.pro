@@ -13,11 +13,13 @@ TEMPLATE = app
 SOURCES += \
     main.cpp \
     cmdparserfile.cpp \
-    cmdhandlerfile.cpp
+    cmdhandlerfile.cpp \
+    commonhelpers.cpp
 
 HEADERS += \
     cmdparserfile.h \
-    cmdhandlerfile.h
+    cmdhandlerfile.h \
+    commonhelpers.h
 
 target.path = /usr/bin
 INSTALLS += target

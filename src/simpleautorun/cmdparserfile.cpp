@@ -1,5 +1,6 @@
 #include <QFile>
 #include <QTextStream>
+#include "commonhelpers.h"
 #include "cmdparserfile.h"
 
 CmdParserFile::CmdParserFile(QObject *parent) : QSimpleCmdParserBase(parent)
@@ -84,7 +85,8 @@ void CmdParserFile::StartFileExecution(QString strFileName, CmdHandlerFile *pCmd
     }
     else
     {
-        qWarning("Execution file %s could not be opened!", qPrintable(strFileName));
+        LogMsg(QString("Execution file %1 could not be opened!")
+               .arg(strFileName));
         emit done(-1);
     }
 }
@@ -101,17 +103,21 @@ void CmdParserFile::OnExecNext()
             strCurrLine = strCurrLine.remove(iPos, strCurrLine.length()).trimmed();
         if(!strCurrLine.isEmpty())
         {
-            qInfo("Starting %s...", qPrintable(strCurrLine));
+            LogMsg(QString("Starting %1...")
+                   .arg(strCurrLine));
             QString strResponse = ParseAndStartCmd(strCurrLine, NULL);
-            // check commands failed immediately
+            // check commands returned immediately
             if(!strResponse.isEmpty())
             {
                 // Forward unkown to external if possible
                 if(strResponse.toUpper().contains("UNKNOWN COMMAND"))
-                    m_pCmdHandlerFile->SendRemoteCmd(strCurrLine.toLocal8Bit());
+                {
+                    m_pCmdHandlerFile->SendRemoteCmd(strCurrLine.toLatin1());
+                }
                 else if(!m_bAllowErrors)
                 {
-                    qWarning("Unexpected return %s on local command!", qPrintable(strResponse));
+                    LogMsg(QString("Unexpected return %1 on local command!")
+                           .arg(strResponse));
                     emit done(-1);
                 }
             }
@@ -129,10 +135,11 @@ void CmdParserFile::OnExecNext()
 void CmdParserFile::OnFileCmdFinish(QString strCmdResponse, QIODevice *pCookie)
 {
     Q_UNUSED(pCookie);
-    qInfo(qPrintable(strCmdResponse + "\n"));
+    LogMsg(strCmdResponse);
     if(!m_bAllowErrors && strCmdResponse.toUpper().contains(",ERROR"))
     {
-        qWarning("Unexpected return %s on local command!", qPrintable(strCmdResponse));
+        LogMsg(QString("Unexpected return %1 on local command!")
+               .arg(strCmdResponse));
         emit done(-1);
     }
     else
