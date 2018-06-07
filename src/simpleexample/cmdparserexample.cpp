@@ -8,7 +8,9 @@ CmdParserExample::CmdParserExample(QObject *parent) : QSimpleCmdParserSocketBase
     AddCmdInfo("ExampleMessage",
                CmdParamTypeIdList()  << PARAM_TYPE_STRING,
                CMD_EXAMPLE_MSG,
-               true);
+               true
+               // Just output default help
+               );
 
     /* ExampleDelay: Delay */
     /* Parameters: iDelay <= 10 */
@@ -19,6 +21,16 @@ CmdParserExample::CmdParserExample(QObject *parent) : QSimpleCmdParserSocketBase
                true,
                // extend help command output
                QLatin1String("Parameter: iDelay [0;10]\nReturn: iDelay"));
+
+    /* ExampleHelloWorld: Just return "Hello World" */
+    /* Parameters: none */
+    /* Result: "Hello World" */
+    AddCmdInfo("ExampleHelloWorld",
+               CmdParamTypeIdList(),
+               CMD_EXAMPLE_HELLO_WORLD_RETURN,
+               true,
+               // extend help command output
+               QLatin1String("Parameter: none\nReturn: \"Hello World\""));
 }
 
 void CmdParserExample::OnApplyPressed()
@@ -32,6 +44,7 @@ const QString CmdParserExample::PlausiCheck(SimpleCmdData *pCmd, const QVariantL
     switch(pCmd->GetCmdID())
     {
     case CMD_EXAMPLE_MSG:
+    case CMD_EXAMPLE_HELLO_WORLD_RETURN:
         // No extra param validation
         break;
     case CMD_EXAMPLE_DELAY:

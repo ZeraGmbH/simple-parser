@@ -48,6 +48,9 @@ void CmdHandlerExample::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             m_iDelayRequested = params[0].toInt();
             m_DelayTimer.start(1000*m_iDelayRequested);
             break;
+        case CMD_EXAMPLE_HELLO_WORLD_RETURN:
+            emit OperationFinish(false, QLatin1String("Hello World"));
+            break;
     }
 }
 

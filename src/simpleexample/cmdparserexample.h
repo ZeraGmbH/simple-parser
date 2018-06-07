@@ -10,7 +10,8 @@
 enum CmdExampleCmdIds
 {
     CMD_EXAMPLE_MSG,
-    CMD_EXAMPLE_DELAY
+    CMD_EXAMPLE_DELAY,
+    CMD_EXAMPLE_HELLO_WORLD_RETURN,
 };
 
 class CmdParserExample : public QSimpleCmdParserSocketBase

@@ -1,0 +1,30 @@
+########################### Howto ################################
+# start 'simpleexample -v1' in shell
+# start 'simpleautorun -x <path-to-this-file>/autorun-example-expected
+
+########################### Initialize ###########################
+OpenIPPort,localhost,5000     # 0: Our simpleexample app
+SelectIPConnection,0          # Select simpleexample socket
+
+
+########################### Check all cominations#################
+SetOnErrorStop,0              # Ignore errors
+ExampleHelloWorld
+
+# case sensitive pass/fail
+CheckLastResponse,Hello World,0
+CheckLastResponse,Hello Wurld,0
+
+# case ignore pass/fail
+CheckLastResponse,hello world,1
+CheckLastResponse,hello wurld,1
+
+# case sensitive pass/fail
+SetOnErrorStop,1              # Bail out on error
+CheckLastResponse,Hello World,0
+CheckLastResponse,Hello Wurld,0
+
+
+# This one must not be reached
+CheckLastResponse,MUST NOT BE REACHED,0
+
