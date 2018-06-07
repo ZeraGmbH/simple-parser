@@ -17,6 +17,8 @@ public:
     QStringList::iterator GetNextIterLine();
 signals:
     void cmdFinish();
+    void kill(int exitCode);
+
 public slots:
 
 private:

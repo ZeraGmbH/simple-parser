@@ -24,7 +24,7 @@ public:
     void StartFileExecution(QString strFileName, CmdHandlerFile *pCmdHandlerFile);
 
 signals:
-    void idle();
+    void done(int exitCode);
     void next();
 
 protected:
@@ -38,6 +38,7 @@ private:
 
     QStringList m_strCmdList;
     QStringList::iterator m_iterCurrLine;
+    bool m_bAllowErrors;
 };
 
 #endif // CMDPARSERFILE_H

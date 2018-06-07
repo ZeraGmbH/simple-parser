@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
                        ()
 
     {
-        QObject::connect(&parserFile, &CmdParserFile::idle, &a, &QCoreApplication::quit );
+        QObject::connect(&parserFile, &CmdParserFile::done, &a, &QCoreApplication::exit );
+        QObject::connect(&handlerFile, &CmdHandlerFile::kill, &a, &QCoreApplication::exit );
 
         parserFile.StartFileExecution(strExecFile, &handlerFile);
     });

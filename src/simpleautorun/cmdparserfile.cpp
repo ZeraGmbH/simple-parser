@@ -76,8 +76,10 @@ void CmdParserFile::StartFileExecution(QString strFileName, CmdHandlerFile *pCmd
         emit next();
     }
     else
-        qFatal("Execution file %s could not be opened!", qPrintable(strFileName));
-
+    {
+        qWarning("Execution file %s could not be opened!", qPrintable(strFileName));
+        emit done(-1);
+    }
 }
 
 void CmdParserFile::OnExecNext()
@@ -100,8 +102,11 @@ void CmdParserFile::OnExecNext()
                 // Forward unkown to external if possible
                 if(strResponse.toUpper().contains("UNKNOWN COMMAND"))
                     m_pCmdHandlerFile->SendRemoteCmd(strCurrLine.toLocal8Bit());
-                else
-                    qFatal(qPrintable(strResponse));
+                else if(!m_bAllowErrors)
+                {
+                    qWarning("Unexpected return %s on local command!", qPrintable(strResponse));
+                    emit done(-1);
+                }
             }
         }
         m_iterCurrLine = m_pCmdHandlerFile->GetNextIterLine();
@@ -109,7 +114,8 @@ void CmdParserFile::OnExecNext()
             emit next();
     }
     else
-        emit idle();
+        // exit
+        emit done(0);
 }
 
 // If execution of file command was started, we arrive here
@@ -117,8 +123,11 @@ void CmdParserFile::OnFileCmdFinish(QString strCmdResponse, QIODevice *pCookie)
 {
     Q_UNUSED(pCookie);
     qInfo(qPrintable(strCmdResponse + "\n"));
-    if(strCmdResponse.toUpper().contains(",ERROR"))
-        qFatal("Local file command failed!");
+    if(!m_bAllowErrors && strCmdResponse.toUpper().contains(",ERROR"))
+    {
+        qWarning("Unexpected return %s on local command!", qPrintable(strCmdResponse));
+        emit done(-1);
+    }
     else
         emit next();
 
@@ -126,6 +135,8 @@ void CmdParserFile::OnFileCmdFinish(QString strCmdResponse, QIODevice *pCookie)
 
 const QString CmdParserFile::PlausiCheck(SimpleCmdData *pCmd, const QVariantList &params)
 {
+    // Bail out by default in case internal command errors
+    m_bAllowErrors = false;
     QString strRet;
     int iValue;
     switch(pCmd->GetCmdID())

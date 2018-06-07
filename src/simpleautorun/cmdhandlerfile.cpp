@@ -126,8 +126,10 @@ void CmdHandlerFile::SendRemoteCmd(QByteArray Cmd)
     if(m_pCurrSocket)
         m_pCurrSocket->write(Cmd + END_STR);
     else
-        qFatal("No connection to server established!");
-
+    {
+        qWarning("No connection to server established!");
+        emit kill(-1);
+    }
 }
 
 void CmdHandlerFile::SetCurrIterLine(QStringList::iterator iterCurrLine)
@@ -161,7 +163,10 @@ void CmdHandlerFile::OnReceive()
         if(!m_bStopOnExternalError || !ReadData.toUpper().contains(",ERROR"))
             emit cmdFinish();
         else
-            qFatal("Abort on external error!");
+        {
+            qWarning("Abort on external error!");
+            emit kill(-1);
+        }
     }
 }
 
