@@ -37,7 +37,7 @@ CmdParserFile::CmdParserFile(QObject *parent) : QSimpleCmdParserBase(parent)
     /* Parameters: strTagID, iCount */
     /* Result: None */
     AddCmdInfo("LoopTag",
-               CmdParamTypeIdList() << PARAM_TYPE_STRING  << PARAM_TYPE_INT,
+               CmdParamTypeIdList() << PARAM_TYPE_STRING << PARAM_TYPE_INT,
                CMD_FILE_LOOP_TAG);
 
     /* SetOnErrorStop: Set behaviour in case of error on external commands */
@@ -46,6 +46,13 @@ CmdParserFile::CmdParserFile(QObject *parent) : QSimpleCmdParserBase(parent)
     AddCmdInfo("SetOnErrorStop",
                CmdParamTypeIdList() << PARAM_TYPE_BOOL,
                CMD_FILE_SET_ON_ERROR_STOP);
+
+    /* CheckLastResponse: Check data received from last response */
+    /* Parameters: strExpectedResponse, bIgnoreCase */
+    /* Result: None */
+    AddCmdInfo("CheckLastResponse",
+               CmdParamTypeIdList() << PARAM_TYPE_STRING << PARAM_TYPE_BOOL,
+               CMD_FILE_CHECK_LAST_RESPONSE);
 
 
     connect(this, &CmdParserFile::next, this, &CmdParserFile::OnExecNext);
@@ -164,6 +171,10 @@ const QString CmdParserFile::PlausiCheck(SimpleCmdData *pCmd, const QVariantList
             strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QString("Loop count out of range: %1 [0-65535]").arg(iValue));
         break;
     case CMD_FILE_SET_ON_ERROR_STOP:
+        break;
+    case CMD_FILE_CHECK_LAST_RESPONSE:
+        // Do not bail out in case check fails
+        m_bAllowErrors = true;
         break;
     default:
         // Unhandled is no error -> cmd is passed to current IPport

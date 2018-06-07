@@ -118,13 +118,63 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             m_bStopOnExternalError = params[0].toBool();
             emit OperationFinish(false, "");
             break;
+        case CMD_FILE_CHECK_LAST_RESPONSE:
+        {
+            QString strError;
+            if(m_strLastReceivedExternal.isEmpty())
+                strError = QLatin1String("There is no last command response");
+            else
+            {
+                if(m_strLastReceivedExternal.count(',') >= 2)
+                {
+                    QStringList list = m_strLastReceivedExternal.split(',');
+                    if(list[1].toUpper().contains("ERROR"))
+                        strError = QLatin1String("Last command returned an error");
+                    else
+                    {
+                        QString strExpected = params[0].toString();
+                        bool bIgnoreCase = params[1].toBool();
+                        QString strReceived = list[2];
+                        if(bIgnoreCase)
+                        {
+                            strExpected = strExpected.toUpper();
+                            strReceived = strReceived.toUpper();
+                        }
+                        if(strExpected != strReceived)
+                        {
+                            strError = QString(QLatin1String("Last command check failed Expected \"%1\" / received \"%2\"")).arg(strExpected).arg(strReceived);
+                        }
+                    }
+                }
+                else
+                    strError = QLatin1String("Last command did not return data");
+            }
+            if(!strError.isEmpty())
+            {
+                // It is an internal command but stop goes with extenal error setting
+                if(!m_bStopOnExternalError)
+                    emit OperationFinish(true, strError);
+                else
+                {
+                    qWarning("Abort on check fail: %s", qPrintable(strError));
+                    emit kill(-1);
+                }
+            }
+            else
+                emit OperationFinish(false, "");
+            break;
+        }
     }
 }
 
 void CmdHandlerFile::SendRemoteCmd(QByteArray Cmd)
 {
     if(m_pCurrSocket)
+    {
+        // Avoid drop through recent command respones
+        m_strLastReceivedExternal.clear();
         m_pCurrSocket->write(Cmd + END_STR);
+    }
     else
     {
         qWarning("No connection to server established!");
@@ -158,9 +208,10 @@ void CmdHandlerFile::OnReceive()
 {
     if(m_pCurrSocket)
     {
-        QString ReadData = m_pCurrSocket->readAll();
-        qInfo(qPrintable(ReadData));
-        if(!m_bStopOnExternalError || !ReadData.toUpper().contains(",ERROR"))
+        m_strLastReceivedExternal = m_pCurrSocket->readAll();
+        qInfo(qPrintable(m_strLastReceivedExternal));
+        m_strLastReceivedExternal.replace("\n", "");
+        if(!m_bStopOnExternalError || !m_strLastReceivedExternal.toUpper().contains(",ERROR"))
             emit cmdFinish();
         else
         {

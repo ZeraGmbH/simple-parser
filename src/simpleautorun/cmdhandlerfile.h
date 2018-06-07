@@ -33,6 +33,7 @@ private:
     QMap<QString, QStringList::iterator> m_MapTags;
     QMap<QStringList::iterator, int /*loop count*/> m_MapActiveLoops;
     bool m_bStopOnExternalError;
+    QString m_strLastReceivedExternal;
 };
 
 #endif // CMDHANDLERFILE_H
