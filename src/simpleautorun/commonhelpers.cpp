@@ -6,10 +6,6 @@ bool gbColourOutput = false;
 
 void LogMsg(QString strMsg, t_LogColours colour)
 {
-    QDateTime now = QDateTime::currentDateTime();
-    QString strOut = QString("[%1]: %2")
-            .arg(now.toString("yyyy-MM-dd HH:mm:ss:zzz"))
-            .arg(strMsg);
     QString colourPre, colourPost;
     if(gbColourOutput)
     {
@@ -27,6 +23,13 @@ void LogMsg(QString strMsg, t_LogColours colour)
             break;
         }
     }
+    QDateTime now = QDateTime::currentDateTime();
+    QString strOut = QString("[%1]: %2%3%4")
+            .arg(now.toString("yyyy-MM-dd HH:mm:ss:zzz"))
+            .arg(colourPre)
+            .arg(strMsg)
+            .arg(colourPost);
+
     QTextStream qout(stdout);
-    qout << colourPre << strOut << colourPost << QString("\n");
+    qout << strOut << QString("\n");
 }
