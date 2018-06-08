@@ -174,8 +174,7 @@ void CmdHandlerFile::SendRemoteCmd(QByteArray Cmd)
 {
     if(m_pCurrSocket)
     {
-        LogMsg(QString("--- EXTERNAL BEGIN ---"));
-        LogMsg(Cmd);
+        LogMsg(QString("--> ")+Cmd);
         // Avoid drop through recent command respones
         m_strLastReceivedExternal.clear();
         m_pCurrSocket->write(Cmd + END_STR);
@@ -215,8 +214,7 @@ void CmdHandlerFile::OnReceive()
     {
         m_strLastReceivedExternal = m_pCurrSocket->readAll();
         m_strLastReceivedExternal.replace("\n", "");
-        LogMsg(m_strLastReceivedExternal);
-        LogMsg(QString("--- EXTERNAL END -----"));
+        LogMsg(QString("<-- ")+m_strLastReceivedExternal);
         if(!m_bStopOnExternalError || !m_strLastReceivedExternal.toUpper().contains(",ERROR"))
             emit cmdFinish();
         else
