@@ -31,7 +31,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             {
                 LogMsg(QString("IP connection %1:%2 was opened successfully!")
                        .arg(params[0].toString())
-                       .arg(params[1].toInt()));
+                       .arg(params[1].toInt()),LOG_COLOUR_GREEN);
                 m_listSockets.append(pNewSocket);
                 SelectSocket(pNewSocket);
                 emit OperationFinish(false, "");
@@ -45,7 +45,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             {
                 SelectSocket(m_listSockets[iConnectionNo]);
                 LogMsg(QString("IP connection %1 was selected successfully!")
-                       .arg(iConnectionNo));
+                       .arg(iConnectionNo),LOG_COLOUR_GREEN);
                 emit OperationFinish(false, "");
             }
             else
@@ -159,7 +159,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                 else
                 {
                     LogMsg(QString("Abort on check fail: %1")
-                           .arg(strError));
+                           .arg(strError), LOG_COLOUR_RED);
                     emit kill(-1);
                 }
             }
@@ -181,7 +181,7 @@ void CmdHandlerFile::SendRemoteCmd(QByteArray Cmd)
     }
     else
     {
-        LogMsg(QString("No connection to server established!"));
+        LogMsg(QString("No connection to server established!"), LOG_COLOUR_RED);
         emit kill(-1);
     }
 }
@@ -214,12 +214,13 @@ void CmdHandlerFile::OnReceive()
     {
         m_strLastReceivedExternal = m_pCurrSocket->readAll();
         m_strLastReceivedExternal.replace("\n", "");
-        LogMsg(QString("<-- ")+m_strLastReceivedExternal);
-        if(!m_bStopOnExternalError || !m_strLastReceivedExternal.toUpper().contains(",ERROR"))
+        bool bError = m_strLastReceivedExternal.toUpper().contains(",ERROR");
+        LogMsg(QString("<-- ")+m_strLastReceivedExternal, bError ? LOG_COLOUR_RED : LOG_COLOUR_GREEN);
+        if(!m_bStopOnExternalError || !bError)
             emit cmdFinish();
         else
         {
-            LogMsg(QString("Abort on external error!"));
+            LogMsg(QString("Abort on external error!"), LOG_COLOUR_RED);
             emit kill(-1);
         }
     }

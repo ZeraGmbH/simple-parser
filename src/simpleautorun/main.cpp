@@ -5,6 +5,7 @@
 #include <QTimer>
 #include "cmdparserfile.h"
 #include "cmdhandlerfile.h"
+#include "commonhelpers.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,10 +19,23 @@ int main(int argc, char *argv[])
     QCommandLineOption optExecFile(QStringList() << "x" << "exec-file", "fill path execution file", "path");
     parser.addOption(optExecFile);
 
+    // option colour
+    QCommandLineOption optColour(QStringList() << "c" << "colour", "coloured output 0/1", "colour");
+    parser.addOption(optColour);
+
     parser.process(a);
     QString strExecFile = parser.value(optExecFile);
     if(strExecFile.isEmpty())
         parser.showHelp(-1);
+
+    QString strColour = parser.value(optColour);
+    if(!strColour.isEmpty())
+    {
+        if(strColour!=QString("1"))
+            parser.showHelp(-1);
+        else
+            gbColourOutput = true;
+    }
 
     CmdParserFile parserFile;
     CmdHandlerFile handlerFile;

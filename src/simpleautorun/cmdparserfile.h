@@ -40,6 +40,7 @@ private:
     QStringList m_strCmdList;
     QStringList::iterator m_iterCurrLine;
     bool m_bAllowErrors;
+    int m_iCurrCmdID;
 };
 
 #endif // CMDPARSERFILE_H

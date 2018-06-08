@@ -86,7 +86,7 @@ void CmdParserFile::StartFileExecution(QString strFileName, CmdHandlerFile *pCmd
     else
     {
         LogMsg(QString("Execution file %1 could not be opened!")
-               .arg(strFileName));
+               .arg(strFileName), LOG_COLOUR_RED);
         emit done(-1);
     }
 }
@@ -117,7 +117,7 @@ void CmdParserFile::OnExecNext()
                 else if(!m_bAllowErrors)
                 {
                     LogMsg(QString("Unexpected return %1 on local command!")
-                           .arg(strResponse));
+                           .arg(strResponse), LOG_COLOUR_RED);
                     emit done(-1);
                 }
             }
@@ -135,11 +135,15 @@ void CmdParserFile::OnExecNext()
 void CmdParserFile::OnFileCmdFinish(QString strCmdResponse, QIODevice *pCookie)
 {
     Q_UNUSED(pCookie);
-    LogMsg(strCmdResponse);
-    if(!m_bAllowErrors && strCmdResponse.toUpper().contains(",ERROR"))
+    bool bError = strCmdResponse.toUpper().contains(",ERROR");
+    if(m_iCurrCmdID == CMD_FILE_CHECK_LAST_RESPONSE)
+        LogMsg(strCmdResponse, bError ? LOG_COLOUR_RED : LOG_COLOUR_GREEN);
+    else
+        LogMsg(strCmdResponse);
+    if(!m_bAllowErrors && bError)
     {
         LogMsg(QString("Unexpected return %1 on local command!")
-               .arg(strCmdResponse));
+               .arg(strCmdResponse),LOG_COLOUR_RED);
         emit done(-1);
     }
     else
@@ -153,7 +157,8 @@ const QString CmdParserFile::PlausiCheck(SimpleCmdData *pCmd, const QVariantList
     m_bAllowErrors = false;
     QString strRet;
     int iValue;
-    switch(pCmd->GetCmdID())
+    m_iCurrCmdID = pCmd->GetCmdID();
+    switch(m_iCurrCmdID)
     {
     case CMD_FILE_OPEN_IPPORT:
         iValue = params[1].toInt();
