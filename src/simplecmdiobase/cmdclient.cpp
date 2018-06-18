@@ -23,12 +23,12 @@ void QSimpleCmdClient::OnReceive()
             // Extract one command
             QString strCmd = m_strCmdBuffer.left(iLFPos);
             m_strCmdBuffer = m_strCmdBuffer.right(m_strCmdBuffer.length() - iLFPos - 1);
-            // Give it to the parser
-            QString strRet = m_pCmdParser->ParseAndStartCmd(strCmd, m_pSocket);
             // Log
             bool bLog = m_pCmdParser->GetCmdLog();
             if(bLog)
                 qInfo("%s/%i: %s", qPrintable(m_pCmdParser->GetParserName()), m_pCmdParser->GetListenPort(), qPrintable(strCmd));
+            // Give it to the parser
+            QString strRet = m_pCmdParser->ParseAndStartCmd(strCmd, m_pSocket);
             // Immediate response?
             if(!strRet.isEmpty())
             {
