@@ -167,6 +167,11 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                 emit OperationFinish(false, "");
             break;
         }
+        case CMD_FILE_MESSAGE:
+            LogMsg(QString("%1 <Press RETURN>").arg(params[0].toString()), LOG_COLOUR_BLUE);
+            while(getchar()!='\n');
+            emit OperationFinish(false, "");
+            break;
     }
 }
 

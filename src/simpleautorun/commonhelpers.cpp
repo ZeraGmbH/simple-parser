@@ -21,6 +21,10 @@ void LogMsg(QString strMsg, t_LogColours colour)
             colourPre = QString("\033[0;32m");
             colourPost = QString("\033[0;0m");
             break;
+        case LOG_COLOUR_BLUE:
+            colourPre = QString("\033[0;34m");
+            colourPost = QString("\033[0;0m");
+            break;
         }
     }
     QDateTime now = QDateTime::currentDateTime();

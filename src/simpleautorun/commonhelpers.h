@@ -9,6 +9,7 @@ typedef enum {
     LOG_COLOUR_NONE = 0,
     LOG_COLOUR_RED,
     LOG_COLOUR_GREEN,
+    LOG_COLOUR_BLUE,
     } t_LogColours;
 
 void LogMsg(QString strMsg, t_LogColours colour = LOG_COLOUR_NONE);

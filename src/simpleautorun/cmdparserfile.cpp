@@ -55,6 +55,12 @@ CmdParserFile::CmdParserFile(QObject *parent) : QSimpleCmdParserBase(parent)
                CmdParamTypeIdList() << PARAM_TYPE_STRING << PARAM_TYPE_BOOL,
                CMD_FILE_CHECK_LAST_RESPONSE);
 
+    /* MsgAndWait: Output message and wait for user to press return */
+    /* Parameters: strMessage */
+    /* Result: None */
+    AddCmdInfo("MsgAndWait",
+               CmdParamTypeIdList() << PARAM_TYPE_STRING,
+               CMD_FILE_MESSAGE);
 
     connect(this, &CmdParserFile::next, this, &CmdParserFile::OnExecNext);
     connect(this, &CmdParserFile::CmdFinish, this, &CmdParserFile::OnFileCmdFinish );
@@ -187,6 +193,8 @@ const QString CmdParserFile::PlausiCheck(SimpleCmdData *pCmd, const QVariantList
     case CMD_FILE_CHECK_LAST_RESPONSE:
         // Do not bail out in case check fails
         m_bAllowErrors = true;
+        break;
+    case CMD_FILE_MESSAGE:
         break;
     default:
         // Unhandled is no error -> cmd is passed to current IPport
