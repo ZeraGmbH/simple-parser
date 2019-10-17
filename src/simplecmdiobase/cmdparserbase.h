@@ -46,7 +46,7 @@ class SIMPLE_CMDIO_EXPORT QSimpleCmdParserBase : public QObject
 {
     Q_OBJECT
 public:
-    explicit QSimpleCmdParserBase(QObject *parent = 0);
+    explicit QSimpleCmdParserBase(QObject *parent = nullptr);
     void AddCmdInfo(QString strCmd, CmdParamTypeIdList paramList, int iCmdID, bool bLogCmd=true, QString strHelpAdd = QString()); /* setup commands */
     const QString ParseAndStartCmd(QString strCmd, QIODevice *pCookie); /* return non-empty string if finished */
     void SetCmdHandler(QSimpleCmdHandlerBase* pCmdHandler);
@@ -84,7 +84,7 @@ class SIMPLE_CMDIO_EXPORT QSimpleCmdParserSocketBase : public QSimpleCmdParserBa
 {
     Q_OBJECT
 public:
-    explicit QSimpleCmdParserSocketBase(QObject *parent = 0);
+    explicit QSimpleCmdParserSocketBase(QObject *parent = nullptr);
     void SetListenPort(quint16 ui16IPPort);
     quint16 GetListenPort();
 private:

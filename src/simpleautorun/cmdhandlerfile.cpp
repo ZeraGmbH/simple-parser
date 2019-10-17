@@ -7,7 +7,7 @@
 
 CmdHandlerFile::CmdHandlerFile(QObject *parent) : QSimpleCmdHandlerBase(parent)
 {
-    m_pCurrSocket = NULL;
+    m_pCurrSocket = nullptr;
     m_bStopOnExternalError = false;
 }
 

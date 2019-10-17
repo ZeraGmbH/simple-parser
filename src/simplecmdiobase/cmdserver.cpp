@@ -3,7 +3,7 @@
 
 QSimpleCmdServer::QSimpleCmdServer(QObject* parent) : QObject(parent)
 {
-    m_pParser = Q_NULLPTR;
+    m_pParser = nullptr;
     connect(&m_Server, &QTcpServer::newConnection, this, &QSimpleCmdServer::OnClientNew);
 }
 

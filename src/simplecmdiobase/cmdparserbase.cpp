@@ -20,7 +20,7 @@ QString SimpleCmdData::GetDisplayStr()
 bool QSimpleCmdParserBase::m_bLogCmdGlobal = false;
 
 QSimpleCmdParserBase::QSimpleCmdParserBase(QObject *parent) :
-    QObject(parent), m_pCurrCmd(Q_NULLPTR), m_pCookie(Q_NULLPTR), m_pCmdHandler(Q_NULLPTR), m_bLogCmd(m_bLogCmdGlobal)
+    QObject(parent), m_pCurrCmd(nullptr), m_pCookie(nullptr), m_pCmdHandler(nullptr), m_bLogCmd(m_bLogCmdGlobal)
 {
 }
 
@@ -199,7 +199,7 @@ const QString QSimpleCmdParserBase::ParseAndStartCmd(QString strCmd, QIODevice *
                 if(bParamFormatOK)
                 {
                     // Are we busy?
-                    if(m_pCurrCmd != Q_NULLPTR)
+                    if(m_pCurrCmd != nullptr)
                         strRet = FormatErrorMsg(cmdData->m_strDisplay, "Cannot start while command \"" + m_pCurrCmd->m_strDisplay +"\"is busy!");
                     else
                     {
@@ -249,8 +249,8 @@ void QSimpleCmdParserBase::OnOperationFinish(bool bError, QString strReturn)
         strEmit += QString(QLatin1String(",")) + strReturn;
 
     QIODevice* pCookie = m_pCookie;
-    m_pCurrCmd = Q_NULLPTR;
-    m_pCookie = Q_NULLPTR;
+    m_pCurrCmd = nullptr;
+    m_pCookie = nullptr;
     emit CmdFinish(strEmit, pCookie);
 }
 

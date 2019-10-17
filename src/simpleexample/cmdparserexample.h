@@ -18,7 +18,7 @@ class CmdParserExample : public QSimpleCmdParserSocketBase
 {
     Q_OBJECT
 public:
-    CmdParserExample(QObject *parent = Q_NULLPTR);
+    CmdParserExample(QObject *parent = nullptr);
     virtual QString GetParserName() { return QLatin1String("ExampleParser"); }
 
 public slots:

@@ -5,7 +5,7 @@
 
 CmdParserFile::CmdParserFile(QObject *parent) : QSimpleCmdParserBase(parent)
 {
-    m_pCmdHandlerFile = NULL;
+    m_pCmdHandlerFile = nullptr;
     /* OpenIPPort: Open a IP port to fmt service */
     /* Parameters: strIP, iPort */
     /* Result: None */
@@ -111,7 +111,7 @@ void CmdParserFile::OnExecNext()
         {
             LogMsg(QString("Starting %1...")
                    .arg(strCurrLine));
-            QString strResponse = ParseAndStartCmd(strCurrLine, NULL);
+            QString strResponse = ParseAndStartCmd(strCurrLine, nullptr);
             // check commands returned immediately
             if(!strResponse.isEmpty())
             {

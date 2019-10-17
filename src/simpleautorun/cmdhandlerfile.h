@@ -10,7 +10,7 @@ class CmdHandlerFile : public QSimpleCmdHandlerBase
 {
     Q_OBJECT
 public:
-    explicit CmdHandlerFile(QObject *parent = 0);
+    explicit CmdHandlerFile(QObject *parent = nullptr);
     virtual void StartCmd(SimpleCmdData *pCmd, QVariantList params);
     void SendRemoteCmd(QByteArray Cmd);
     void SetCurrIterLine(QStringList::iterator iterCurrLine);

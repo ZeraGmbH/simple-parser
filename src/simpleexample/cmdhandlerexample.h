@@ -11,7 +11,7 @@ class CmdHandlerExample : public QSimpleCmdHandlerBase
 {
     Q_OBJECT
 public:
-    CmdHandlerExample(QObject *parent = Q_NULLPTR);
+    CmdHandlerExample(QObject *parent = nullptr);
     virtual void StartCmd(SimpleCmdData *pCmd, QVariantList params);
 
 signals:

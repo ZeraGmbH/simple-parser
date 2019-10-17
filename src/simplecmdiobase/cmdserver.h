@@ -12,7 +12,7 @@ class SIMPLE_CMDIO_EXPORT QSimpleCmdServer: public QObject
 {
     Q_OBJECT
 public:
-    QSimpleCmdServer(QObject *parent = 0);
+    QSimpleCmdServer(QObject *parent = nullptr);
     bool Setup(quint16 ui16IPPort, QSimpleCmdParserSocketBase *pParser);
 
 public slots:

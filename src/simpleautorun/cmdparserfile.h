@@ -21,7 +21,7 @@ class CmdParserFile : public QSimpleCmdParserBase
 {
     Q_OBJECT
 public:
-    explicit CmdParserFile(QObject *parent = NULL);
+    explicit CmdParserFile(QObject *parent = nullptr);
     virtual QString GetParserName() { return QLatin1String("FILE"); }
     void StartFileExecution(QString strFileName, CmdHandlerFile *pCmdHandlerFile);
 

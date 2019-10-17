@@ -15,7 +15,7 @@ void CmdHandlerExample::StartCmd(SimpleCmdData *pCmd, QVariantList params)
         case CMD_EXAMPLE_MSG:
         {
             QMessageBox::StandardButton selection = QMessageBox::information(
-                Q_NULLPTR,
+                nullptr,
                 QLatin1String("Example message command received"),
                 QString(QLatin1String("Param received: %1\n\n"
                                       "OK: Immediate out / no data return\n"
