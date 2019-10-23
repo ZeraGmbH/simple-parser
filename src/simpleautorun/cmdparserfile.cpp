@@ -69,18 +69,17 @@ CmdParserFile::CmdParserFile(QObject *parent) : QSimpleCmdParserBase(parent)
 
 void CmdParserFile::StartFileExecution(QString strFileName, CmdHandlerFile *pCmdHandlerFile)
 {
-    if(m_pCmdHandlerFile)
+    if(m_pCmdHandlerFile) {
         disconnect(m_pCmdHandlerFile, &CmdHandlerFile::cmdFinish, this, &CmdParserFile::OnExecNext);
+    }
     m_pCmdHandlerFile = pCmdHandlerFile;
     connect(m_pCmdHandlerFile, &CmdHandlerFile::cmdFinish, this, &CmdParserFile::OnExecNext);
 
     QFile executeFile(strFileName);
-    if(executeFile.open(QIODevice::ReadOnly))
-    {
+    if(executeFile.open(QIODevice::ReadOnly)) {
         m_strCmdList.clear();
         QTextStream textStream(&executeFile);
-        while (!textStream.atEnd())
-        {
+        while (!textStream.atEnd()) {
             QString strLine = textStream.readLine();
             if(!strLine.isEmpty())
                 m_strCmdList.append(strLine);
@@ -89,9 +88,8 @@ void CmdParserFile::StartFileExecution(QString strFileName, CmdHandlerFile *pCmd
         m_iterCurrLine = m_strCmdList.begin();
         emit next();
     }
-    else
-    {
-        LogMsg(QString("Execution file %1 could not be opened!")
+    else {
+        LogMsg(QStringLiteral("Execution file %1 could not be opened!")
                .arg(strFileName), LOG_COLOUR_RED);
         emit done(-1);
     }
@@ -99,62 +97,61 @@ void CmdParserFile::StartFileExecution(QString strFileName, CmdHandlerFile *pCmd
 
 void CmdParserFile::OnExecNext()
 {
-    if(m_iterCurrLine != m_strCmdList.end())
-    {
+    if(m_iterCurrLine != m_strCmdList.end()) {
         m_pCmdHandlerFile->SetCurrIterLine(m_iterCurrLine);
         QString strCurrLine = *m_iterCurrLine;
         // ignore comments
         int iPos = strCurrLine.indexOf("#");
-        if(iPos >= 0)
+        if(iPos >= 0) {
             strCurrLine = strCurrLine.remove(iPos, strCurrLine.length()).trimmed();
-        if(!strCurrLine.isEmpty())
-        {
-            LogMsg(QString("Starting %1...")
+        }
+        if(!strCurrLine.isEmpty()) {
+            LogMsg(QStringLiteral("Starting %1...")
                    .arg(strCurrLine));
             QString strResponse = ParseAndStartCmd(strCurrLine, nullptr);
             // check commands returned immediately
-            if(!strResponse.isEmpty())
-            {
+            if(!strResponse.isEmpty()) {
                 // Forward unkown to external if possible
-                if(strResponse.toUpper().contains("UNKNOWN COMMAND"))
-                {
+                if(strResponse.toUpper().contains("UNKNOWN COMMAND")) {
                     m_pCmdHandlerFile->SendRemoteCmd(strCurrLine.toLatin1());
                 }
-                else if(!m_bAllowErrors)
-                {
-                    LogMsg(QString("Unexpected return %1 on local command!")
+                else if(!m_bAllowErrors) {
+                    LogMsg(QStringLiteral("Unexpected return %1 on local command!")
                            .arg(strResponse), LOG_COLOUR_RED);
                     emit done(-1);
                 }
             }
         }
         m_iterCurrLine = m_pCmdHandlerFile->GetNextIterLine();
-        if(strCurrLine.isEmpty())
+        if(strCurrLine.isEmpty()) {
             emit next();
+        }
     }
-    else
+    else {
         // exit
         emit done(0);
+    }
 }
 
 // If execution of file command was started, we arrive here
 void CmdParserFile::OnFileCmdFinish(QString strCmdResponse, QIODevice *pCookie)
 {
-    Q_UNUSED(pCookie);
+    Q_UNUSED(pCookie)
     bool bError = strCmdResponse.toUpper().contains(",ERROR");
-    if(m_iCurrCmdID == CMD_FILE_CHECK_LAST_RESPONSE)
+    if(m_iCurrCmdID == CMD_FILE_CHECK_LAST_RESPONSE) {
         LogMsg(strCmdResponse, bError ? LOG_COLOUR_RED : LOG_COLOUR_GREEN);
-    else
+    }
+    else {
         LogMsg(strCmdResponse);
-    if(!m_bAllowErrors && bError)
-    {
-        LogMsg(QString("Unexpected return %1 on local command!")
+    }
+    if(!m_bAllowErrors && bError) {
+        LogMsg(QStringLiteral("Unexpected return %1 on local command!")
                .arg(strCmdResponse),LOG_COLOUR_RED);
         emit done(-1);
     }
-    else
+    else {
         emit next();
-
+    }
 }
 
 const QString CmdParserFile::PlausiCheck(SimpleCmdData *pCmd, const QVariantList &params)
@@ -164,29 +161,32 @@ const QString CmdParserFile::PlausiCheck(SimpleCmdData *pCmd, const QVariantList
     QString strRet;
     int iValue;
     m_iCurrCmdID = pCmd->GetCmdID();
-    switch(m_iCurrCmdID)
-    {
+    switch(m_iCurrCmdID) {
     case CMD_FILE_OPEN_IPPORT:
         iValue = params[1].toInt();
-        if(iValue < 1 || iValue > 65535)
-            strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QString("Port of range: %1 [1-65535]").arg(iValue));
+        if(iValue < 1 || iValue > 65535) {
+            strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QStringLiteral("Port of range: %1 [1-65535]").arg(iValue));
+        }
         break;
     case CMD_FILE_SELECT_IPCONNECTION:
         iValue = params[0].toInt();
-        if(iValue < 0)
-            strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QString("IP number connection must be >= 0"));
+        if(iValue < 0) {
+            strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QStringLiteral("IP number connection must be >= 0"));
+        }
         break;
     case CMD_FILE_WAIT_MS:
         iValue = params[0].toInt();
-        if(iValue < 1 || iValue > 100000)
-            strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QString("Pause of range: %1 [1-100000]").arg(iValue));
+        if(iValue < 1 || iValue > 100000) {
+            strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QStringLiteral("Pause of range: %1 [1-100000]").arg(iValue));
+        }
         break;
     case CMD_FILE_SET_TAG:
         break;
     case CMD_FILE_LOOP_TAG:
         iValue = params[1].toInt();
-        if(iValue < 0 || iValue > 65535)
-            strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QString("Loop count out of range: %1 [0-65535]").arg(iValue));
+        if(iValue < 0 || iValue > 65535) {
+            strRet = FormatErrorMsg(pCmd->GetDisplayStr(), QStringLiteral("Loop count out of range: %1 [0-65535]").arg(iValue));
+        }
         break;
     case CMD_FILE_SET_ON_ERROR_STOP:
         break;

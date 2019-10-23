@@ -1,11 +1,10 @@
-#include <QCoreApplication>
-#include <QCommandLineParser>
-#include <QDebug>
-#include <QObject>
-#include <QTimer>
 #include "cmdparserfile.h"
 #include "cmdhandlerfile.h"
 #include "commonhelpers.h"
+#include <QCoreApplication>
+#include <QCommandLineParser>
+#include <QObject>
+#include <QTimer>
 
 int main(int argc, char *argv[])
 {
@@ -29,12 +28,13 @@ int main(int argc, char *argv[])
         parser.showHelp(-1);
 
     QString strColour = parser.value(optColour);
-    if(!strColour.isEmpty())
-    {
-        if(strColour!=QString("1"))
+    if(!strColour.isEmpty()) {
+        if(strColour!=QLatin1String("1")) {
             parser.showHelp(-1);
-        else
+        }
+        else {
             gbColourOutput = true;
+        }
     }
 
     CmdParserFile parserFile;
@@ -43,9 +43,7 @@ int main(int argc, char *argv[])
 
     // Ensure event loop up
     QTimer::singleShot(300,[&]
-                       ()
-
-    {
+                       () {
         QObject::connect(&parserFile, &CmdParserFile::done, &a, &QCoreApplication::exit );
         QObject::connect(&handlerFile, &CmdHandlerFile::kill, &a, &QCoreApplication::exit );
 

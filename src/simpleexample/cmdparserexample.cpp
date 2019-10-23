@@ -49,7 +49,7 @@ const QString CmdParserExample::PlausiCheck(SimpleCmdData *pCmd, const QVariantL
         break;
     case CMD_EXAMPLE_DELAY:
         if(params[0].toInt() < 0 || params[0].toInt() > 10)
-            strErrInfo = QString("Parameter out of limits: %1 allowed [0;10]").arg(params[0].toInt());
+            strErrInfo = QStringLiteral("Parameter out of limits: %1 allowed [0;10]").arg(params[0].toInt());
         break;
     }
     if(!strErrInfo.isEmpty())
