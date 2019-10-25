@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     QString strColour = parser.value(optColour);
     if(!strColour.isEmpty()) {
-        if(strColour!=QLatin1String("1")) {
+        if(strColour!=QStringLiteral("1")) {
             parser.showHelp(-1);
         }
         else {

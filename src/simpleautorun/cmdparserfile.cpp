@@ -113,7 +113,7 @@ void CmdParserFile::OnExecNext()
             if(!strResponse.isEmpty()) {
                 // Forward unkown to external if possible
                 if(strResponse.toUpper().contains("UNKNOWN COMMAND")) {
-                    m_pCmdHandlerFile->SendRemoteCmd(strCurrLine.toLatin1());
+                    m_pCmdHandlerFile->SendRemoteCmd(strCurrLine);
                 }
                 else if(!m_bAllowErrors) {
                     LogMsg(QStringLiteral("Unexpected return %1 on local command!")

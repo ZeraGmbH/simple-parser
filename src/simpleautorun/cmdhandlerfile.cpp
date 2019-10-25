@@ -111,7 +111,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
         {
             QString strError;
             if(m_strLastReceivedExternal.isEmpty()) {
-                strError = QLatin1String("There is no last command response");
+                strError = QStringLiteral("There is no last command response");
             }
             else
             {
@@ -161,13 +161,13 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
     }
 }
 
-void CmdHandlerFile::SendRemoteCmd(QByteArray Cmd)
+void CmdHandlerFile::SendRemoteCmd(QString Cmd)
 {
     if(m_pCurrSocket) {
         LogMsg(QStringLiteral("--> ")+Cmd);
         // Avoid drop through recent command respones
         m_strLastReceivedExternal.clear();
-        m_pCurrSocket->write(Cmd + END_STR);
+        m_pCurrSocket->write((Cmd + END_STR).toUtf8());
     }
     else {
         LogMsg(QStringLiteral("No connection to server established!"), LOG_COLOUR_RED);

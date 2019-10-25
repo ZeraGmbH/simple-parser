@@ -20,7 +20,7 @@ CmdParserExample::CmdParserExample(QObject *parent) : QSimpleCmdParserSocketBase
                CMD_EXAMPLE_DELAY,
                true,
                // extend help command output
-               QLatin1String("Parameter: iDelay [0;10]\nReturn: iDelay"));
+               QStringLiteral("Parameter: iDelay [0;10]\nReturn: iDelay"));
 
     /* ExampleHelloWorld: Just return "Hello World" */
     /* Parameters: none */
@@ -30,12 +30,12 @@ CmdParserExample::CmdParserExample(QObject *parent) : QSimpleCmdParserSocketBase
                CMD_EXAMPLE_HELLO_WORLD_RETURN,
                true,
                // extend help command output
-               QLatin1String("Parameter: none\nReturn: \"Hello World\""));
+               QStringLiteral("Parameter: none\nReturn: \"Hello World\""));
 }
 
 void CmdParserExample::OnApplyPressed()
 {
-    SetGlobalOutOfOrderMessage(QLatin1String("Apply was pressed!"));
+    SetGlobalOutOfOrderMessage(QStringLiteral("Apply was pressed!"));
 }
 
 const QString CmdParserExample::PlausiCheck(SimpleCmdData *pCmd, const QVariantList &params)

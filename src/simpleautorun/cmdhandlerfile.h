@@ -12,7 +12,7 @@ class CmdHandlerFile : public QSimpleCmdHandlerBase
 public:
     explicit CmdHandlerFile(QObject *parent = nullptr);
     virtual void StartCmd(SimpleCmdData *pCmd, QVariantList params);
-    void SendRemoteCmd(QByteArray Cmd);
+    void SendRemoteCmd(QString Cmd);
     void SetCurrIterLine(QStringList::iterator iterCurrLine);
     QStringList::iterator GetNextIterLine();
 signals:
@@ -24,7 +24,7 @@ public slots:
 private:
     void SelectSocket(QTcpSocket *pSocket);
     void OnReceive();
-    void OnDisconnect();
+    void OnDisconnect [[noreturn]] ();
 
     QList<QTcpSocket*> m_listSockets;
     QTcpSocket *m_pCurrSocket;
