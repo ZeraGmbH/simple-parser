@@ -13,8 +13,8 @@ simpleautorun -x <command-file>
 
 The command-file is read line by line. Each line contains either a command for simpleautorun itself (internal commands) or
 for devices connected (external commands). Empty lines or lines starting with ‘#’ are ignored. To study or test a simple
-example, see example files [autorun-example](doc/autorun-example) and
-[autorun-example-expected](doc/autorun-example-expected).
+example, see example files in this folder [autorun-example](autorun-example) and
+[autorun-example-expected](autorun-example-expected).
 
 In case of error on internal command, the sequence stops except command [CheckLastResponse](#check_last_response)
 which follows the setting made by [SetOnErrorStop](#set_on_error_stop).
