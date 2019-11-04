@@ -281,6 +281,33 @@ bool QSimpleCmdParserBase::isValidHexValue(QString strParam, int iMaxLen)
     return bValidHexValue;
 }
 
+/**
+  @b Convert ASCII to binary by replacing escape sequences
+  @param strParam [in] ASCII Param
+  @returns binary data
+  */
+QByteArray QSimpleCmdParserBase::BinaryFromAscii(QString strParam)
+{
+    QByteArray data = strParam.toLatin1();
+    data = data.replace("\\\\","\\");
+    data = data.replace("\\n","\n");
+    data = data.replace("\\r","\r");
+    data = data.replace("\\t","\t");
+    data = data.replace(const_cast<char*>("\\0"),2,const_cast<char*>("\0"),1);
+    data = data.replace("\\;",",");
+    return data;
+}
+
+/**
+  @b Help string for escape sequences and specials
+  @param strParam [in] ASCII Param
+  @returns Help string
+  */
+QString QSimpleCmdParserBase::BinaryConversionHelpString()
+{
+    return QLatin1String("Escapes: \'\\\\\' \'\\n\' \'\\r\' \'\\t\' Specials: \'\\0\' -> 0x00 \'\\;\' -> \',\'");
+}
+
 QSimpleCmdParserSocketBase::QSimpleCmdParserSocketBase(QObject *parent) :
     QSimpleCmdParserBase(parent), m_ui16IPPort(0)
 {

@@ -52,6 +52,8 @@ public:
     void SetCmdHandler(QSimpleCmdHandlerBase* pCmdHandler);
     void SetGlobalOutOfOrderMessage(QString strMessage);
     virtual QString GetParserName() { return QStringLiteral("unknown"); }
+    static QByteArray BinaryFromAscii(QString strParam);
+    static QString BinaryConversionHelpString();
     // One for all
     static void SetCmdLogGlobal(bool bLogCmdGlobal);                /* Shut up all logging */
     bool GetCmdLog();                                               /* Global enable && per command enable log */
