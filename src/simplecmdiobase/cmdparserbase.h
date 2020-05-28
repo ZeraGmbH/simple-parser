@@ -66,6 +66,7 @@ protected:
     virtual const QString PlausiCheck(SimpleCmdData *pCmd, const QVariantList &params);   /* return non-empty string for error */
     const QString FormatErrorMsg(QString strCmd, QString strErrDescription);
     bool isValidHexValue(QString strParam, int iMaxLen);
+    QString ExpandMacro(QString &strParam);
 
 private:
     QHash<QString, SimpleCmdData*> m_cmdList;         /* CmdName hashes param information */

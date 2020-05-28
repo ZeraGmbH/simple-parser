@@ -20,6 +20,12 @@ Protocol rules:
   * FLOAT: Float point numbers with `.` as decimal separator
     Exponential representations as `1234.56e-02` are accepted
   * STRING: A printable string
+* Parameters can be expanded recursively by macros. Currently the following macros are available:
+  * `@date_time(QDateTime-format-string)`: expands to formatted system date/time
+  * `@ascii_to_hex(string)`: expands to hexadecimal representation of `string`
+  * `@hex_to_ascii(hex_string)`: expands to`hex_string` to ASCII
+  * `@num_to_hex(integer;min_num_hex_digits)`: expands `integer` to hexadecimal string
+
 
 To create a server the following is required:
 

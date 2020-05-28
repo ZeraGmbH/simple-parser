@@ -1,6 +1,8 @@
 #include "cmdparserbase.h"
 #include "cmdhandlerbase.h"
 #include <QCoreApplication>
+#include <QDateTime>
+#include <QRegularExpression>
 
 SimpleCmdData::SimpleCmdData(QString strDisplay, CmdParamTypeIdList ListParams, int CmdID, bool bLogCmd, QString strHelpAdd) :
     m_strDisplay(strDisplay), m_ListParams(ListParams), m_CmdID(CmdID), m_bLogCmd(bLogCmd), m_strHelpAdd(strHelpAdd)
@@ -100,6 +102,17 @@ const QString QSimpleCmdParserBase::ParseAndStartCmd(QString strCmd, QIODevice *
                 strRet += QStringLiteral("--------------------------------------------------------------------------------\n");
                 strRet += QStringLiteral("Name: %1\n\n").arg(GetParserName());
                 strRet += QStringLiteral("--------------------------------------------------------------------------------\n");
+                // Macros
+                strRet += QStringLiteral("Parameter macros:\n\n");
+                strRet += QStringLiteral("@date_time(QDateTime-format-string): expands to formatted system date/time\n");
+                strRet += QStringLiteral("@ascii_to_hex(string): expands to hexadecimal representation of `string`\n");
+                strRet += QStringLiteral("@hex_to_ascii(hex_string): expands to`hex_string` to ASCII\n");
+                strRet += QStringLiteral("@num_to_hex(integer;min_num_hex_digits): expands `integer` to hexadecimal\n");
+                strRet += QStringLiteral("\n");
+                strRet += QStringLiteral("--------------------------------------------------------------------------------\n");
+
+                strRet += QStringLiteral("Commands:\n");
+                strRet += QStringLiteral("--------------------------------------------------------------------------------\n");
                 // Sort commands
                 QMap<QString, SimpleCmdData*> cmdListSorted;
                 for(QHash<QString, SimpleCmdData*>::iterator iterCmd = m_cmdList.begin();
@@ -147,15 +160,26 @@ const QString QSimpleCmdParserBase::ParseAndStartCmd(QString strCmd, QIODevice *
             SimpleCmdData *cmdData = m_cmdList[strCmdUpp];
             // Check parameters
             if(strCmdAndParamList.count() == cmdData->m_ListParams.count() + 1) {
-                // First trim numeric
+                // expand macros
+                QString strMacroError;
+                for(int iParam=0; iParam<cmdData->m_ListParams.count();iParam++) {
+                    strMacroError += ExpandMacro(strCmdAndParamList[iParam+1]);
+                }
+                // early out in case of macro error(s)
+                if(!strMacroError.isEmpty()) {
+                    return FormatErrorMsg(cmdData->m_strDisplay, strMacroError.right(strMacroError.size()-3) /* remove lead ' / ' */);
+                }
+
+                // trim numeric params
                 for(int iParam=0; iParam<cmdData->m_ListParams.count();iParam++) {
                     if( cmdData->m_ListParams[iParam] == PARAM_TYPE_BOOL ||
                             cmdData->m_ListParams[iParam] == PARAM_TYPE_INT ||
                             cmdData->m_ListParams[iParam] == PARAM_TYPE_FLOAT )
                         strCmdAndParamList[iParam+1] = strCmdAndParamList[iParam+1].trimmed();
                 }
-                QVariantList params;
+                // check parameter format
                 bool bParamFormatOK = true;
+                QVariantList params;
                 for(int iParam=0; iParam<cmdData->m_ListParams.count();iParam++) {
                     QVariant param;
                     QString strParam = strCmdAndParamList[iParam+1];
@@ -279,6 +303,141 @@ bool QSimpleCmdParserBase::isValidHexValue(QString strParam, int iMaxLen)
         }
     }
     return bValidHexValue;
+}
+
+/**
+ * @b Expand macros starting with @
+ * @param strParam [in/out] parameter to expand
+ * @return in case error: Helpful message
+ */
+QString QSimpleCmdParserBase::ExpandMacro(QString &strParam)
+{
+    // Macro expansion. When adding further macros don't forget to
+    // * adjust help text above
+    // * README.md
+
+    // expand from right to left
+    int lastEt = strParam.size();
+    int iMacroStartPos, iMacroLabelEndPos, iParamsEndPos;
+
+    QString strKnownMacro;
+    QString strError;
+    while((lastEt = strParam.lastIndexOf('@', lastEt-1)) >= 0) {
+        QString strBefore;
+        QString strParamConverted;
+        QString strAfter;
+        bool bExpandedOne = false;
+
+        // common
+        strBefore = strParam.left(lastEt);
+        iParamsEndPos = strParam.indexOf(')', lastEt);
+        if(iParamsEndPos > 0) {
+            strAfter = strParam.mid(iParamsEndPos+1);
+        }
+
+        // @date_time
+        if(!bExpandedOne) {
+            strKnownMacro = QStringLiteral("@date_time(");
+            iMacroStartPos = strParam.indexOf(strKnownMacro, lastEt);
+            if(iMacroStartPos == lastEt) {
+                iMacroLabelEndPos = iMacroStartPos+strKnownMacro.size();
+                // param
+                if(iParamsEndPos > 0) {
+                    strParamConverted = QDateTime::currentDateTime().toString(strParam.mid(iMacroLabelEndPos, iParamsEndPos-iMacroLabelEndPos));
+                }
+                else {
+                    strError += QStringLiteral(" / @date_time: ')' missing");
+                }
+                bExpandedOne = true;
+            }
+        }
+        // @ascii_to_hex
+        if(!bExpandedOne) {
+            strKnownMacro = QStringLiteral("@ascii_to_hex(");
+            iMacroStartPos = strParam.indexOf(strKnownMacro, lastEt);
+            if(iMacroStartPos == lastEt) {
+                iMacroLabelEndPos = iMacroStartPos+strKnownMacro.size();
+                // param
+                if(iParamsEndPos > 0) {
+                    QByteArray macroParam = strParam.mid(iMacroLabelEndPos, iParamsEndPos-iMacroLabelEndPos).toLatin1();
+                    strParamConverted = QString().fromLatin1(macroParam.toHex());
+                }
+                else {
+                    strError += QStringLiteral(" / @ascii_to_hex: ')' missing");
+                }
+                bExpandedOne = true;
+            }
+        }
+        // @hex_to_ascii
+        if(!bExpandedOne) {
+            strKnownMacro = QStringLiteral("@hex_to_ascii(");
+            iMacroStartPos = strParam.indexOf(strKnownMacro, lastEt);
+            if(iMacroStartPos == lastEt) {
+                iMacroLabelEndPos = iMacroStartPos+strKnownMacro.size();
+                // param
+                if(iParamsEndPos > 0) {
+                    QString strMacroParam = strParam.mid(iMacroLabelEndPos, iParamsEndPos-iMacroLabelEndPos);
+                    QRegularExpression hexMatcher(QStringLiteral("^[a-fA-F0-9]+$"));
+                    QRegularExpressionMatch match = hexMatcher.match(strMacroParam);
+                    if (match.hasMatch()) {
+                        strParamConverted = QString().fromLatin1(QByteArray::fromHex(strMacroParam.toLatin1()));
+                    }
+                    else {
+                        strError += QStringLiteral(" / @hex_to_ascii: '%1' is not valid hex").arg(strMacroParam);
+                    }
+                }
+                else {
+                    strError += QStringLiteral(" / @hex_to_ascii: ')' missing");
+                }
+                bExpandedOne = true;
+            }
+        }
+        // @num_to_hex
+        if(!bExpandedOne) {
+            strKnownMacro = QStringLiteral("@num_to_hex(");
+            iMacroStartPos = strParam.indexOf(strKnownMacro, lastEt);
+            if(iMacroStartPos == lastEt) {
+                iMacroLabelEndPos = iMacroStartPos+strKnownMacro.size();
+                // params
+                if(iParamsEndPos > 0) {
+                    QStringList params = strParam.mid(iMacroLabelEndPos, iParamsEndPos-iMacroLabelEndPos).split(';');
+                    if(params.size() == 2) {
+                        // value
+                        bool bValidVal, bValidLen;
+                        strParamConverted = QStringLiteral("%1").arg(params[0].toInt(&bValidVal, 16));
+                        int iMinDigits = params[1].toInt(&bValidLen);
+                        if(bValidVal && bValidLen) {
+                            // leading 0
+                            if(iMinDigits>strParamConverted.size()) {
+                                strParamConverted = QString(iMinDigits-strParamConverted.size(), '0') + strParamConverted;
+                            }
+                        }
+                        else {
+                            if(!bValidVal) {
+                                strError += QStringLiteral(" / @num_to_hex: '%1' is not a valid number").arg(params[0]);
+                            }
+                            if(!bValidLen) {
+                                strError += QStringLiteral(" / @num_to_hex: '%1' is not a valid length").arg(params[1]);
+                            }
+                        }
+                    }
+                    else {
+                        strError += QStringLiteral(" / @num_to_hex: expects two parametes");
+                    }
+                }
+                else {
+                    strError += QStringLiteral(" / @num_to_hex: ')' missing");
+                }
+                bExpandedOne = true;
+            }
+        }
+        if(bExpandedOne) {
+            strParam = strBefore + strParamConverted + strAfter;
+            lastEt = strParam.size();
+            continue;
+        }
+    }
+    return strError;
 }
 
 /**
