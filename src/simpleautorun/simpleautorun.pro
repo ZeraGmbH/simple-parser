@@ -5,6 +5,8 @@ QT -= gui
 TARGET = simpleautorun
 CONFIG += console
 CONFIG -= app_bundle
+# for old compilers
+CONFIG += c++11
 
 TEMPLATE = app
 

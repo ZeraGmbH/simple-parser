@@ -1,8 +1,5 @@
 TEMPLATE = subdirs
 
-# for old compilers
-CONFIG += c++11
-
 SUBDIRS = \
     simplecmdiobase \
     simpleautorun \
