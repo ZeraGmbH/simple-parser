@@ -404,7 +404,7 @@ QString QSimpleCmdParserBase::ExpandMacro(QString &strParam)
                     if(params.size() == 2) {
                         // value
                         bool bValidVal, bValidLen;
-                        strParamConverted = QStringLiteral("%1").arg(params[0].toInt(&bValidVal, 16));
+                        strParamConverted = QStringLiteral("%1").arg(params[0].toInt(&bValidVal, 10), 0, 16);
                         int iMinDigits = params[1].toInt(&bValidLen);
                         if(bValidVal && bValidLen) {
                             // leading 0
