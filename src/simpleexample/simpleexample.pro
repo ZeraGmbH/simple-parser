@@ -2,6 +2,9 @@ QT += core gui widgets network
 
 CONFIG += console
 
+# for old compilers
+CONFIG += c++11
+
 # Use lib outside here
 #QT += simplecmdiobase
 
