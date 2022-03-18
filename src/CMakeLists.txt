@@ -1,0 +1,3 @@
+add_subdirectory(simpleautorun)
+add_subdirectory(simplecmdiobase)
+add_subdirectory(simpleexample)
