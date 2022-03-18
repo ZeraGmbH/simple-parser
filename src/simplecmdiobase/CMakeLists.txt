@@ -5,6 +5,9 @@ set(HEADERS
     cmdclient.h
     cmdhandlerbase.h
     cmdserver.h
+    QSimpleCmdHandlerBase
+    QSimpleCmdParserSocketBase
+    QSimpleCmdServer
 )
 
 set(SOURCES
@@ -40,9 +43,39 @@ target_include_directories(simplecmdiobase
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 
-install(TARGETS simplecmdiobase
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+# configure *ConfigVersion.cmake
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    SimpleCmdioBaseConfigVersion.cmake
+    VERSION ${PACKAGE_VERSION}
+    COMPATIBILITY SameMinorVersion
+    )
+
+# configure *Config.cmake
+configure_file(SimpleCmdioBaseConfig.cmake.in SimpleCmdioBaseConfig.cmake @ONLY)
+
+# install *Config(Version).cmake
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/SimpleCmdioBaseConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/SimpleCmdioBaseConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SimpleCmdioBase
+    )
+
+# install targets cmake-files
+install(EXPORT SimpleCmdioBase
+    FILE SimpleCmdioBaseTargets.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SimpleCmdioBase
+    )
+
+#generate export header
+include(GenerateExportHeader)
+generate_export_header(simplecmdiobase)
+
+#install export header
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/simplecmdiobase_export.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/SimpleCmdioBase
+    )
+
 
 # install library
 install(TARGETS simplecmdiobase
@@ -52,6 +85,6 @@ install(TARGETS simplecmdiobase
 
 # install public headers
 install(
-    FILES ${HEADER}
+    FILES ${HEADERS}
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/SimpleCmdioBase
 )

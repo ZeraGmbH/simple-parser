@@ -4,11 +4,11 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include "cmdclient.h"
-#include "simplecmdiobase_global.h"
+#include "simplecmdiobase_export.h"
 
 class QSimpleCmdParserSocketBase;
 
-class SIMPLE_CMDIO_EXPORT QSimpleCmdServer: public QObject
+class SIMPLECMDIOBASE_EXPORT QSimpleCmdServer: public QObject
 {
     Q_OBJECT
 public:
