@@ -1,7 +1,7 @@
 INCLUDEPATH += $$PWD
 
 PUBLIC_HEADERS += \
-    $$PWD/simplecmdiobase_global.h \
+    $$PWD/simplecmdiobase_export.h \
     $$PWD/cmdhandlerbase.h \
     $$PWD/cmdparserbase.h \
     $$PWD/cmdclient.h \

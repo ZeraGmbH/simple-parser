@@ -8,7 +8,7 @@
 #define END_STR '\n'
 #define END_IGNORE '\r'
 
-#include "simplecmdiobase_global.h"
+#include "simplecmdiobase_export.h"
 
 // forwards
 class QSimpleCmdParserBase;
@@ -26,7 +26,7 @@ enum CmdParamTypeIds
 typedef QList<enum CmdParamTypeIds> CmdParamTypeIdList;
 
 // command parsing/handling data
-class SIMPLE_CMDIO_EXPORT SimpleCmdData
+class SIMPLECMDIOBASE_EXPORT SimpleCmdData
 {
 public:
     SimpleCmdData(QString strDisplay, CmdParamTypeIdList ListParams, int CmdID, bool bLogCmd, QString strHelpAdd);
@@ -42,7 +42,7 @@ private:
 };
 
 
-class SIMPLE_CMDIO_EXPORT QSimpleCmdParserBase : public QObject
+class SIMPLECMDIOBASE_EXPORT QSimpleCmdParserBase : public QObject
 {
     Q_OBJECT
 public:
@@ -81,7 +81,7 @@ private:
 };
 
 // class QSimpleCmdParserSocketBase
-class SIMPLE_CMDIO_EXPORT QSimpleCmdParserSocketBase : public QSimpleCmdParserBase
+class SIMPLECMDIOBASE_EXPORT QSimpleCmdParserSocketBase : public QSimpleCmdParserBase
 {
     Q_OBJECT
 public:

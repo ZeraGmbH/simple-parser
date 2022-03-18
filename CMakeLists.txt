@@ -15,6 +15,10 @@ set(SIMPLEPARSER_VERSION_PATCH "1")
 
 set(PROJECT_VERSION "${SIMPLEPARSER_VERSION_MAJOR}.${SIMPLEPARSER_VERSION_MINOR}.${SIMPLEPARSER_VERSION_PATCH}")
 
+#Adding cmake functions like feature_summary()
+include(FeatureSummary)
+include(GNUInstallDirs)
+
 #Find dependecies
 find_package(Qt5 COMPONENTS Core Network Gui Widgets CONFIG REQUIRED)
 
