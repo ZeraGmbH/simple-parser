@@ -127,7 +127,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                             strReceived = strReceived.toUpper();
                         }
                         if(strExpected != strReceived) {
-                            strError = QStringLiteral("Last command check failed expected '%1' / received '%2'").arg(strExpected).arg(strReceived);
+                            strError = QStringLiteral("Last command check failed expected '%1' / received '%2'").arg(strExpected, strReceived);
                         }
                     }
                 }
