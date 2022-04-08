@@ -112,7 +112,7 @@ void CmdParserFile::OnExecNext()
             // check commands returned immediately
             if(!strResponse.isEmpty()) {
                 // Forward unkown to external if possible
-                if(strResponse.toUpper().contains("UNKNOWN COMMAND")) {
+                if(strResponse.contains("UNKNOWN COMMAND", Qt::CaseInsensitive)) {
                     m_pCmdHandlerFile->SendRemoteCmd(strCurrLine);
                 }
                 else if(!m_bAllowErrors) {
