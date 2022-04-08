@@ -19,6 +19,9 @@ set(PROJECT_VERSION "${SIMPLEPARSER_VERSION_MAJOR}.${SIMPLEPARSER_VERSION_MINOR}
 include(FeatureSummary)
 include(GNUInstallDirs)
 
+# yes we mean it for all targets
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+
 #Find dependecies
 find_package(Qt5 COMPONENTS Core Network Gui Widgets CONFIG REQUIRED)
 
