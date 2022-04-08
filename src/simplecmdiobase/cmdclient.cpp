@@ -14,7 +14,7 @@ void QSimpleCmdClient::OnReceive()
     QTcpSocket *pSocket = qobject_cast<QTcpSocket*>(sender());
     if(pSocket == m_pSocket) {
         QString ReadData = QString::fromUtf8(m_pSocket->readAll());
-        ReadData = ReadData.replace(END_IGNORE, QStringLiteral());
+        ReadData = ReadData.replace(END_IGNORE, QLatin1String());
         m_strCmdBuffer += ReadData;
         int iLFPos;
         while((iLFPos=m_strCmdBuffer.indexOf(END_STR)) >= 0) {
