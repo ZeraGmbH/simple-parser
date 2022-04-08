@@ -137,7 +137,7 @@ void CmdParserFile::OnExecNext()
 void CmdParserFile::OnFileCmdFinish(QString strCmdResponse, QIODevice *pCookie)
 {
     Q_UNUSED(pCookie)
-    bool bError = strCmdResponse.toUpper().contains(",ERROR");
+    bool bError = strCmdResponse.contains(",ERROR", Qt::CaseInsensitive);
     if(m_iCurrCmdID == CMD_FILE_CHECK_LAST_RESPONSE) {
         LogMsg(strCmdResponse, bError ? LOG_COLOUR_RED : LOG_COLOUR_GREEN);
     }
