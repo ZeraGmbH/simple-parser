@@ -28,10 +28,10 @@ void LogMsg(QString strMsg, t_LogColours colour)
     }
     QDateTime now = QDateTime::currentDateTime();
     QString strOut = QStringLiteral("[%1]: %2%3%4")
-            .arg(now.toString("yyyy-MM-dd HH:mm:ss:zzz"))
-            .arg(colourPre)
-            .arg(strMsg)
-            .arg(colourPost);
+            .arg(now.toString("yyyy-MM-dd HH:mm:ss:zzz"),
+                 colourPre,
+                 strMsg,
+                 colourPost);
 
     qInfo("%s", qPrintable(strOut));
 }
