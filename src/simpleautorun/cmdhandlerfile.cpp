@@ -115,7 +115,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             {
                 if(m_strLastReceivedExternal.count(',') >= 2) {
                     QStringList list = m_strLastReceivedExternal.split(',');
-                    if(list[1].toUpper().contains("ERROR")) {
+                    if(list[1].contains(QStringLiteral("ERROR"), Qt::CaseInsensitive)) {
                         strError = QStringLiteral("Last command returned an error");
                     }
                     else {
@@ -201,7 +201,7 @@ void CmdHandlerFile::OnReceive()
     if(m_pCurrSocket) {
         m_strLastReceivedExternal = m_pCurrSocket->readAll();
         m_strLastReceivedExternal.replace("\n", "");
-        bool bError = m_strLastReceivedExternal.toUpper().contains(",ERROR");
+        bool bError = m_strLastReceivedExternal.contains(",ERROR", Qt::CaseInsensitive);
         LogMsg(QStringLiteral("<-- ")+m_strLastReceivedExternal, bError ? LOG_COLOUR_RED : LOG_COLOUR_GREEN);
         if(!m_bStopOnExternalError || !bError) {
             emit cmdFinish();
