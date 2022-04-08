@@ -13,8 +13,9 @@ jobs:
     strategy:
       matrix:
         compiler:
-          - gcc
-          - clang
+          - g++
+          - clang++
+          - clazy
 
     container:
       image: schnitzeltony/fedora-qt5:32
@@ -37,10 +38,8 @@ jobs:
           mkdir -p "$HOME/targetbuild"
           cd "$HOME/targetbuild"
 
-          if [ "${{ matrix.compiler }}" == "clang" ]; then
-            export CC=clang
-            export CXX=clang++
-          fi
+          export CXX=${{ matrix.compiler }}
+
           cmake $GITHUB_WORKSPACE \
            -DCMAKE_PREFIX_PATH="$HOME/install/usr;/usr" \
            -DCMAKE_INSTALL_PREFIX:PATH="$HOME/install/usr" \
