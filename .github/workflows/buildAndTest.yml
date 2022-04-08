@@ -14,7 +14,7 @@ jobs:
       matrix:
         compiler:
           - g++
-          - clang++
+          #- clang++
           - clazy
 
     container:
