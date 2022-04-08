@@ -42,9 +42,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                 emit OperationFinish(false, "");
             }
             else {
-                QString strError;
-                strError.sprintf("IP connection %i was not opened!", iConnectionNo);
-                emit OperationFinish(true, strError);
+                emit OperationFinish(true, QStringLiteral("IP connection %1 was not opened!").arg(iConnectionNo));
             }
             break;
         }
