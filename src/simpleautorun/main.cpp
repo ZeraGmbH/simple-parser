@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     parserFile.SetCmdHandler(&handlerFile);
 
     // Ensure event loop up
-    QTimer::singleShot(300,[&]
+    QTimer::singleShot(300, &parserFile, [&]
                        () {
         QObject::connect(&parserFile, &CmdParserFile::done, &a, &QCoreApplication::exit );
         QObject::connect(&handlerFile, &CmdHandlerFile::kill, &a, &QCoreApplication::exit );
