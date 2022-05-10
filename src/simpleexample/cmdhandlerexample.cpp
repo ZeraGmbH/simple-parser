@@ -23,7 +23,7 @@ void CmdHandlerExample::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             switch(selection) {
             case QMessageBox::Ok:
                 // Immediate command return without further data
-                emit OperationFinish(false, QLatin1String());
+                emit OperationFinish(false, QString());
                 break;
             case QMessageBox::Apply:
                 // Immediate command return without further data
