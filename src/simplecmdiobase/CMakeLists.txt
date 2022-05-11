@@ -38,7 +38,7 @@ target_link_libraries (simplecmdiobase
 target_include_directories(simplecmdiobase
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/SimpleCmdioBase>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/simplecmdiobase>
     INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
@@ -46,24 +46,24 @@ target_include_directories(simplecmdiobase
 # configure *ConfigVersion.cmake
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-    SimpleCmdioBaseConfigVersion.cmake
+    simplecmdiobaseConfigVersion.cmake
     VERSION ${PACKAGE_VERSION}
     COMPATIBILITY SameMajorVersion
     )
 
 # configure *Config.cmake
-configure_file(SimpleCmdioBaseConfig.cmake.in SimpleCmdioBaseConfig.cmake @ONLY)
+configure_file(simplecmdiobaseConfig.cmake.in simplecmdiobaseConfig.cmake @ONLY)
 
 # install *Config(Version).cmake
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/SimpleCmdioBaseConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/SimpleCmdioBaseConfigVersion.cmake"
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SimpleCmdioBase
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/simplecmdiobaseConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/simplecmdiobaseConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simplecmdiobase
     )
 
 # install targets cmake-files
-install(EXPORT SimpleCmdioBase
-    FILE SimpleCmdioBaseTargets.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SimpleCmdioBase
+install(EXPORT simplecmdiobase
+    FILE simplecmdiobaseTargets.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simplecmdiobase
     )
 
 #generate export header
@@ -73,18 +73,18 @@ generate_export_header(simplecmdiobase)
 #install export header
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/simplecmdiobase_export.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/SimpleCmdioBase
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/simplecmdiobase
     )
 
 
 # install library
 install(TARGETS simplecmdiobase
-    EXPORT SimpleCmdioBase
+    EXPORT simplecmdiobase
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 # install public headers
 install(
     FILES ${HEADERS}
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/SimpleCmdioBase
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/simplecmdiobase
 )
