@@ -14,7 +14,7 @@ enum CmdFILEIOCmdIds
     CMD_FILE_SET_ON_ERROR_STOP,
     CMD_FILE_CHECK_LAST_RESPONSE,
     CMD_FILE_MESSAGE,
-
+    CMD_FILE_CHECK_LAST_RESPONSE_WITH_FILE,
 };
 
 class CmdParserFile : public QSimpleCmdParserBase

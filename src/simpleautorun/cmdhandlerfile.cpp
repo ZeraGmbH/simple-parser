@@ -1,6 +1,7 @@
 #include <QTimer>
 #include <QEventLoop>
 #include <QStringList>
+#include <QFile>
 #include "commonhelpers.h"
 #include "cmdhandlerfile.h"
 #include "cmdparserfile.h"
@@ -106,6 +107,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
             emit OperationFinish(false, "");
             break;
         case CMD_FILE_CHECK_LAST_RESPONSE:
+        case CMD_FILE_CHECK_LAST_RESPONSE_WITH_FILE:
         {
             QString strError;
             if(m_strLastReceivedExternal.isEmpty()) {
@@ -119,8 +121,23 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                         strError = QStringLiteral("Last command returned an error");
                     }
                     else {
-                        QString strExpected = params[0].toString();
+                        QString strExpected;
                         bool bIgnoreCase = params[1].toBool();
+
+                        if (pCmd->GetCmdID() == CMD_FILE_CHECK_LAST_RESPONSE_WITH_FILE) {
+
+                            QFile executeFile(params[0].toString());
+                            if(executeFile.open(QIODevice::ReadOnly)) {
+                                QTextStream textStream(&executeFile);
+                                strExpected = textStream.readAll();
+                                strExpected = strExpected.replace("\n", " ");
+                            }
+                            executeFile.close();
+                        }
+                        else {
+                            strExpected = params[0].toString();
+                        }
+
                         QString strReceived = list[2];
                         if(bIgnoreCase) {
                             strExpected = strExpected.toUpper();

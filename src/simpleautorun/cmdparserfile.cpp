@@ -62,6 +62,13 @@ CmdParserFile::CmdParserFile(QObject *parent) : QSimpleCmdParserBase(parent)
                CmdParamTypeIdList() << PARAM_TYPE_STRING,
                CMD_FILE_MESSAGE);
 
+    /* CheckLastResponseWithFile: Check data received from last response by comparing it with data from an input file */
+    /* Parameters: strFileName, bIgnoreCase */
+    /* Result: None */
+    AddCmdInfo("CheckLastResponseWithFile",
+               CmdParamTypeIdList() << PARAM_TYPE_STRING << PARAM_TYPE_BOOL,
+               CMD_FILE_CHECK_LAST_RESPONSE_WITH_FILE);
+
     connect(this, &CmdParserFile::next, this, &CmdParserFile::OnExecNext);
     connect(this, &CmdParserFile::CmdFinish, this, &CmdParserFile::OnFileCmdFinish );
 
@@ -138,7 +145,7 @@ void CmdParserFile::OnFileCmdFinish(QString strCmdResponse, QIODevice *pCookie)
 {
     Q_UNUSED(pCookie)
     bool bError = strCmdResponse.contains(",ERROR", Qt::CaseInsensitive);
-    if(m_iCurrCmdID == CMD_FILE_CHECK_LAST_RESPONSE) {
+    if((m_iCurrCmdID == CMD_FILE_CHECK_LAST_RESPONSE) || (m_iCurrCmdID == CMD_FILE_CHECK_LAST_RESPONSE_WITH_FILE)){
         LogMsg(strCmdResponse, bError ? LOG_COLOUR_RED : LOG_COLOUR_GREEN);
     }
     else {
@@ -191,6 +198,7 @@ const QString CmdParserFile::PlausiCheck(SimpleCmdData *pCmd, const QVariantList
     case CMD_FILE_SET_ON_ERROR_STOP:
         break;
     case CMD_FILE_CHECK_LAST_RESPONSE:
+    case CMD_FILE_CHECK_LAST_RESPONSE_WITH_FILE:
         // Do not bail out in case check fails
         m_bAllowErrors = true;
         break;
