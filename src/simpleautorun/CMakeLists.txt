@@ -27,13 +27,13 @@ target_link_libraries (simpleautorunlib
 )
 
 # announce headers - target perspective
-#target_include_directories(simpleautorunlib
-#    PUBLIC
-#    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-#    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/simpleautorunlib>
-#    INTERFACE
-#    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-#)
+target_include_directories(simpleautorunlib
+    PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/simpleautorunlib>
+    INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+)
 
 # configure *ConfigVersion.cmake
 include(CMakePackageConfigHelpers)
@@ -53,19 +53,19 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/simpleautorunlibConfig.cmake"
     )
 
 # install targets cmake-files
-install(EXPORT simplecmdiobase
+install(EXPORT simpleautorunlib
     FILE simpleautorunlibTargets.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simpleautorunlib
     )
 
 #generate export header
 #include(GenerateExportHeader)
-#generate_export_header(simplecmdiobase)
+#generate_export_header(simpleautorunlib)
 
 #install export header
 #install(FILES
-#    ${CMAKE_CURRENT_BINARY_DIR}/simplecmdiobase_export.h
-#    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/simplecmdiobase
+#    ${CMAKE_CURRENT_BINARY_DIR}/simpleautorunlib_export.h
+#    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/simpleautorunlib
 #    )
 
 
