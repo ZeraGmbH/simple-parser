@@ -34,6 +34,7 @@ private:
     QMap<QStringList::iterator, int /*loop count*/> m_MapActiveLoops;
     bool m_bStopOnExternalError;
     QString m_strLastReceivedExternal;
+    quint64 expectedResponseLength = 0;
 };
 
 #endif // CMDHANDLERFILE_H
