@@ -144,7 +144,25 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                             strReceived = strReceived.toUpper();
                         }
                         if(strExpected != strReceived) {
-                            strError = QStringLiteral("Last command check failed expected '%1' / received '%2'").arg(strExpected, strReceived);
+                            if (pCmd->GetCmdID() == CMD_FILE_CHECK_LAST_RESPONSE_WITH_FILE) {
+                                strError = "Failed";
+                                if (strExpected.length() != strReceived.length()) {
+                                    strError.append(QStringLiteral("\nLength different: Expected '%1'\tReceived '%2'").arg(strExpected.length(), strReceived.length()));
+                                }
+                                else {
+                                    QStringList expectedStrings = strExpected.split(QLatin1Char(' '));
+                                    QStringList receivedStrings = strReceived.split(QLatin1Char(' '));
+                                    for (int i = 0; i < expectedStrings.size(); i++) {
+                                        if (expectedStrings.at(i) != receivedStrings.at(i)) {
+                                            strError.append(QStringLiteral("\nValue different at index '%1':\tExpected '%2'\tReceived '%3'").arg(i).\
+                                                            arg(expectedStrings.at(i)).arg(receivedStrings.at(i)));
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                strError = QStringLiteral("Last command check failed expected '%1' / received '%2'").arg(strExpected, strReceived);
+                            }
                         }
                     }
                 }
