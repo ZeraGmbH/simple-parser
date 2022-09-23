@@ -155,7 +155,7 @@ void CmdHandlerFile::StartCmd(SimpleCmdData *pCmd, QVariantList params)
                                     for (int i = 0; i < expectedStrings.size(); i++) {
                                         if (expectedStrings.at(i) != receivedStrings.at(i)) {
                                             strError.append(QStringLiteral("\nValue different at index '%1':\tExpected '%2'\tReceived '%3'").arg(i).\
-                                                            arg(expectedStrings.at(i)).arg(receivedStrings.at(i)));
+                                                            arg(expectedStrings.at(i), receivedStrings.at(i)));
                                         }
                                     }
                                 }
