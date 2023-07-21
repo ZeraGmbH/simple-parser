@@ -234,26 +234,16 @@ void CmdHandlerFile::SelectSocket(QTcpSocket *pSocket)
 void CmdHandlerFile::OnReceive()
 {
     if(m_pCurrSocket) {
-        //If response is longer than 32768 bytes, then it is received in multiple packets
-        //so, we use first parameter as the expected length of the response in bytes
-
-        if (m_strLastReceivedExternal.isEmpty()) {
-            expectedResponseLength = m_pCurrSocket->read(sizeof(qint64)).toLongLong();
+        m_strLastReceivedExternal = m_pCurrSocket->readAll();
+        m_strLastReceivedExternal.replace("\n", "");
+        bool bError = m_strLastReceivedExternal.contains(",ERROR", Qt::CaseInsensitive);
+        LogMsg(QStringLiteral("<-- ")+m_strLastReceivedExternal, bError ? LOG_COLOUR_RED : LOG_COLOUR_GREEN);
+        if(!m_bStopOnExternalError || !bError) {
+            emit cmdFinish();
         }
-        m_strLastReceivedExternal.append(m_pCurrSocket->readAll());
-
-        if(m_strLastReceivedExternal.length() == expectedResponseLength) {
-            m_strLastReceivedExternal.replace("\n", "");
-            bool bError = m_strLastReceivedExternal.contains(",ERROR", Qt::CaseInsensitive);
-            LogMsg(QStringLiteral("<-- ")+m_strLastReceivedExternal, bError ? LOG_COLOUR_RED : LOG_COLOUR_GREEN);
-            if(!m_bStopOnExternalError || !bError) {
-                emit cmdFinish();
-            }
-            else {
-                LogMsg(QStringLiteral("Abort on external error!"), LOG_COLOUR_RED);
-                emit kill(-1);
-            }
-            expectedResponseLength = 0;
+        else {
+            LogMsg(QStringLiteral("Abort on external error!"), LOG_COLOUR_RED);
+            emit kill(-1);
         }
     }
 }
