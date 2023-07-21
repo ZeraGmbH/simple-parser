@@ -48,10 +48,6 @@ void QSimpleCmdClient::OnCmdFinish(QString strCmdResponse, QIODevice *pCookie)
             if(m_pCmdParser->GetCmdLog()) {
                 qInfo("%s/%i: %s", qPrintable(m_pCmdParser->GetParserName()), m_pCmdParser->GetListenPort(), qPrintable(dataResponse));
             }
-
-            //send response length as the first parameter of response
-            QString responseLength = QStringLiteral("%1").arg(dataResponse.length(), sizeof(qint64), 10, QLatin1Char('0'));
-            dataResponse.prepend(responseLength);
             m_pSocket->write(dataResponse.toUtf8());
         }
     }
