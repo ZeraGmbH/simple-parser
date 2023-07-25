@@ -323,6 +323,15 @@ QString QSimpleCmdParserBase::ExpandMacro(QString &strParam)
     QString strKnownMacro;
     QString strError;
     while((lastEt = strParam.lastIndexOf('@', lastEt-1)) >= 0) {
+        int braceOpenPos = strParam.indexOf('(', lastEt);
+        int braceClosePos = -1;
+        if(braceOpenPos > 0) {
+            braceClosePos = strParam.indexOf(')', braceOpenPos);
+        }
+        if(braceOpenPos <= 0 || braceClosePos <= 0 || braceOpenPos+1 == braceClosePos) {
+            return QStringLiteral(" / Invalid macro in param ") + strParam;
+        }
+
         QString strBefore;
         QString strParamConverted;
         QString strAfter;
