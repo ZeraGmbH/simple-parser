@@ -2,14 +2,9 @@
 #define TEST_TASK_SIMPLEIO_H
 
 #include "testcmdiocompleteserver.h"
-#include <QObject>
 #include <memory>
 
-// This test tests simplecmdio-testlib too which was created along with
-// SimpleCmdIoClient. Maybe we think about a more simple server test
-// implementation once SimpleCmdIoClient has matured...
-
-class test_task_simpleio : public QObject
+class test_testcompleteserver : public QObject
 {
     Q_OBJECT
 private slots:
