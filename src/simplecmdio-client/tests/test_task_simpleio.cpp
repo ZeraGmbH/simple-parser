@@ -37,7 +37,7 @@ void test_task_simpleio::failInvalidSocket()
 void test_task_simpleio::failInvalidCommand()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), "");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), true, "");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "FooCmd", testTimeout);
@@ -52,7 +52,7 @@ void test_task_simpleio::failInvalidCommand()
 void test_task_simpleio::passCommand()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), "");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), true, "");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "TestCmd", testTimeout);
@@ -67,7 +67,7 @@ void test_task_simpleio::passCommand()
 void test_task_simpleio::failErrorMessageSet()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), "42");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), false, "42");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "TestCmd", testTimeout);

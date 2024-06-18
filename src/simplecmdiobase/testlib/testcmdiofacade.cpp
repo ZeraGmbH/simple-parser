@@ -6,7 +6,7 @@ TestCmdIoFacade::TestCmdIoFacade(int port)
     m_server.Setup(port, &m_parser);
 }
 
-void TestCmdIoFacade::addCmd(QString cmd, CmdParamTypeIdList params, QString paramOkErrorString)
+void TestCmdIoFacade::addCmd(QString cmd, CmdParamTypeIdList params, bool cmdOk, QString cmdInfoReturned)
 {
-    m_parser.add(cmd, params, paramOkErrorString);
+    m_parser.add(cmd, params, cmdOk, cmdInfoReturned);
 }

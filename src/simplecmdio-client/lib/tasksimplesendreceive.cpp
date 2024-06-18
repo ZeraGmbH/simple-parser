@@ -28,14 +28,14 @@ void TaskSimpleSendReceive::start()
 
 void TaskSimpleSendReceive::onReadyRead()
 {
-    m_response.append(m_socket->readAll());
-    if(m_response.endsWith(END_STR))
+    m_serverResponse.append(m_socket->readAll());
+    if(m_serverResponse.endsWith(END_STR))
         decodeResponse();
 }
 
 void TaskSimpleSendReceive::decodeResponse()
 {
-    QString bareResponse = m_response.replace(END_STR, "");
+    QString bareResponse = m_serverResponse.replace(END_STR, "");
     QStringList responseParts = bareResponse.split(",");
     if(responseParts.count() < 2)
         emit sigFinish(false, getTaskId());

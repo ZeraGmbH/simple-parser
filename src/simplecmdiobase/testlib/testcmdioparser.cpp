@@ -5,10 +5,11 @@ TestCmdIoParser::TestCmdIoParser(QObject *parent)
 {
 }
 
-void TestCmdIoParser::add(QString cmd, CmdParamTypeIdList params, QString paramOkErrorString)
+void TestCmdIoParser::add(QString cmd, CmdParamTypeIdList params, bool cmdOk, QString cmdInfoReturned)
 {
-    m_paramOkErrorStrings.append(paramOkErrorString);
-    AddCmdInfo(cmd, params, m_paramOkErrorStrings.count()-1);
+    CommandReturnInfo info = { cmdOk, cmdInfoReturned };
+    m_commandInfos.append(info);
+    AddCmdInfo(cmd, params, m_commandInfos.count()-1);
 }
 
 QString TestCmdIoParser::GetParserName()
@@ -19,6 +20,9 @@ QString TestCmdIoParser::GetParserName()
 const QString TestCmdIoParser::PlausiCheck(SimpleCmdData *pCmd, const QVariantList &params)
 {
     Q_UNUSED(params)
-    QString paramOkErrorString = m_paramOkErrorStrings[pCmd->GetCmdID()];
-    return paramOkErrorString;
+    QString ret;
+    const CommandReturnInfo &info = m_commandInfos[pCmd->GetCmdID()];
+    if(!info.ok)
+        ret = FormatErrorMsg(pCmd->GetDisplayStr(), info.cmdInfoReturned);
+    return ret;
 }
