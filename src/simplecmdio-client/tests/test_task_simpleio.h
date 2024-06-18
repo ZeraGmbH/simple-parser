@@ -1,7 +1,7 @@
 #ifndef TEST_TASK_SIMPLEIO_H
 #define TEST_TASK_SIMPLEIO_H
 
-#include "testcmdiofacade.h"
+#include "testcmdiocompleteserver.h"
 #include <QObject>
 #include <memory>
 
@@ -23,7 +23,7 @@ private slots:
 private:
     void setupServer();
     void setupOpenClient();
-    std::unique_ptr<TestCmdIoFacade> m_simpleServer;
+    std::unique_ptr<TestCmdIoCompleteServer> m_simpleServer;
     std::shared_ptr<QTcpSocket> m_clientSocket;
 };
 
