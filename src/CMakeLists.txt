@@ -1,4 +1,0 @@
-add_subdirectory(simpleautorun)
-add_subdirectory(simplecmdiobase)
-add_subdirectory(simplecmdio-client)
-add_subdirectory(simpleexample)
