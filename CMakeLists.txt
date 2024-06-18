@@ -1,17 +1,15 @@
 cmake_minimum_required(VERSION 3.1)
 
 project(simple-parser LANGUAGES CXX)
-
 set(CMAKE_AUTOMOC ON)
-
 set(PROJECT_VERSION_MAJOR "0")
 set(PROJECT_VERSION_MINOR "3")
 set(PROJECT_VERSION_PATCH "1")
-
 set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
 include(FeatureSummary)
 include(GNUInstallDirs)
+include(GenerateExportHeader)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
 
