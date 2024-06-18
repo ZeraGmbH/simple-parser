@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.1)
 
 project(simple-parser LANGUAGES CXX)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
 set(PROJECT_VERSION_MAJOR "0")
@@ -22,7 +18,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
 find_package(Qt5 COMPONENTS Core Network Gui Widgets CONFIG REQUIRED)
 find_package(ZenuxCore REQUIRED)
 
-
 enable_testing()
 # Inspired by
 # https://github.com/KDAB/kdabtv/blob/master/Qt-Widgets-and-more/UnitTests/Tests/CMakeLists.txt
@@ -36,7 +31,6 @@ function(SETUP_TESTS)
             )
         target_include_directories(${_testname}
             PRIVATE
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
             ${CMAKE_CURRENT_SOURCE_DIR}
             )
         target_link_libraries(${_testname}
@@ -66,6 +60,5 @@ install(EXPORT simplecmdiobase
     FILE simplecmdiobaseTargets.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simplecmdiobase
     )
-
 
 add_subdirectory(src)
