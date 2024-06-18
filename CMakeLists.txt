@@ -59,7 +59,8 @@ install(EXPORT simplecmdiobase
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simplecmdiobase
     )
 
-add_subdirectory(simpleautorun)
-add_subdirectory(simplecmdiobase)
-add_subdirectory(simplecmdio-client)
-add_subdirectory(simpleexample)
+add_subdirectory(app-autorun)
+add_subdirectory(app-example)
+add_subdirectory(lib-client)
+add_subdirectory(lib-server)
+
