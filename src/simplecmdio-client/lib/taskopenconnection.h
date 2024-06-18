@@ -11,7 +11,7 @@ class TaskOpenConnection : public TaskTemplate
 public:
     static TaskTemplatePtr create(std::shared_ptr<QTcpSocket> socket, QString ipAddress, int port, int timeout, std::function<void()> additionalErrorHandler = []{});
     TaskOpenConnection(std::shared_ptr<QTcpSocket> socket, QString ipAddress, int port);
-    virtual void start() override;
+    void start() override;
 private:
     std::shared_ptr<QTcpSocket> m_socket;
     QString m_ipAddress;

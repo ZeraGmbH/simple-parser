@@ -19,7 +19,14 @@ void TaskOpenConnection::start()
 {
     connect(m_socket.get(), &QTcpSocket::connected,
             this, [this](){ emit sigFinish(true, getTaskId()); });
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    connect<void(QTcpSocket::*)(QAbstractSocket::SocketError)>(m_socket.get(), &QTcpSocket::error, this, [this](QAbstractSocket::SocketError socketError) {
+        Q_UNUSED(socketError)
+        emit sigFinish(false, getTaskId());
+    });
+#else
     connect(m_socket.get(), &QTcpSocket::errorOccurred,
             this, [this](){ emit sigFinish(false, getTaskId()); });
+#endif
     m_socket->connectToHost(m_ipAddress, m_port);
 }
