@@ -18,7 +18,8 @@ private slots:
     void failInvalidSocket();
     void failInvalidCommand();
     void passCommand();
-    void failErrorMessageSet();
+    void failParser();
+    void failHandler();
 private:
     void setupServer();
     void setupOpenClient();
