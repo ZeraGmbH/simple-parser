@@ -47,7 +47,7 @@ write_basic_package_version_file(
     COMPATIBILITY SameMajorVersion
     )
 
-configure_file("src/simplecmdiobaseConfig.cmake.in" simplecmdiobaseConfig.cmake @ONLY)
+configure_file("simplecmdiobaseConfig.cmake.in" simplecmdiobaseConfig.cmake @ONLY)
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/simplecmdiobaseConfig.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/simplecmdiobaseConfigVersion.cmake"
@@ -59,4 +59,7 @@ install(EXPORT simplecmdiobase
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simplecmdiobase
     )
 
-add_subdirectory(src)
+add_subdirectory(simpleautorun)
+add_subdirectory(simplecmdiobase)
+add_subdirectory(simplecmdio-client)
+add_subdirectory(simpleexample)
