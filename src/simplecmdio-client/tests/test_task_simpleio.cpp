@@ -37,7 +37,7 @@ void test_task_simpleio::failInvalidSocket()
 void test_task_simpleio::failInvalidCommand()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoFacade::RESULT_OK, "");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoCompleteServer::RESULT_OK, "");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "FooCmd", testTimeout);
@@ -52,7 +52,7 @@ void test_task_simpleio::failInvalidCommand()
 void test_task_simpleio::passCommand()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoFacade::RESULT_OK, "");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoCompleteServer::RESULT_OK, "");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "TestCmd", testTimeout);
@@ -67,7 +67,7 @@ void test_task_simpleio::passCommand()
 void test_task_simpleio::failParser()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoFacade::RESULT_ERROR_PARSER, "42");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoCompleteServer::RESULT_ERROR_PARSER, "42");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "TestCmd", testTimeout);
@@ -82,7 +82,7 @@ void test_task_simpleio::failParser()
 void test_task_simpleio::failHandler()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoFacade::RESULT_ERROR_HANDLER, "42");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoCompleteServer::RESULT_ERROR_HANDLER, "42");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "TestCmd", testTimeout);
@@ -96,7 +96,7 @@ void test_task_simpleio::failHandler()
 
 void test_task_simpleio::setupServer()
 {
-    m_simpleServer = std::make_unique<TestCmdIoFacade>(testPort);
+    m_simpleServer = std::make_unique<TestCmdIoCompleteServer>(testPort);
 
 }
 
