@@ -15,7 +15,6 @@ target_include_directories(simplecmdio-client
     PUBLIC
     $<INSTALL_INTERFACE:include/simplecmdio-client>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     )
 
 target_link_libraries(simplecmdio-client
@@ -28,9 +27,8 @@ target_link_libraries(simplecmdio-client
 set_target_properties(simplecmdio-client PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(simplecmdio-client PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})
 
-export(TARGETS simplecmdio-client FILE VeinFrameworkTargets.cmake)
 install(TARGETS simplecmdio-client
-    EXPORT VeinFrameworkExport
+    EXPORT simplecmdiobase
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
 
