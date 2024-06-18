@@ -40,7 +40,6 @@ target_include_directories(simplecmdiobase
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/simplecmdiobase>
 )
 
-include(GenerateExportHeader)
 generate_export_header(simplecmdiobase)
 
 install(FILES
