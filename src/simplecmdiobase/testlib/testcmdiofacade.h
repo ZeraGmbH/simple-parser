@@ -11,7 +11,7 @@ class TestCmdIoFacade : public QObject
     Q_OBJECT
 public:
     TestCmdIoFacade(int port);
-    void addCmd(QString cmd, CmdParamTypeIdList params, QString paramOkErrorString);
+    void addCmd(QString cmd, CmdParamTypeIdList params, bool cmdOk, QString cmdInfoReturned);
 private:
     TestCmdIoParser m_parser;
     TestCmdIoHandler m_handler;
