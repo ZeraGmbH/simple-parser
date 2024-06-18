@@ -5,10 +5,12 @@ function(SETUP_SIMPLE_PARSER_CLIENT_TESTS)
             PUBLIC
             simplecmdiobase
             simplecmdio-client
+            simplecmdio-testlib
         )
     endforeach()
 endfunction()
 
 SETUP_SIMPLE_PARSER_CLIENT_TESTS(
     test_task_open
+    test_task_simpleio
 )
