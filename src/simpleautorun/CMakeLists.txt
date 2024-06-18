@@ -19,7 +19,7 @@ add_library(simpleautorunlib SHARED
 
 #set target Version
 set_target_properties(simpleautorunlib PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(simpleautorunlib PROPERTIES SOVERSION ${SIMPLEPARSER_VERSION_MAJOR})
+set_target_properties(simpleautorunlib PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})
 
 target_link_libraries (simpleautorunlib
     PUBLIC

@@ -8,21 +8,37 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
-#Set project Version
-set(SIMPLEPARSER_VERSION_MAJOR "0")
-set(SIMPLEPARSER_VERSION_MINOR "3")
-set(SIMPLEPARSER_VERSION_PATCH "1")
+set(PROJECT_VERSION_MAJOR "0")
+set(PROJECT_VERSION_MINOR "3")
+set(PROJECT_VERSION_PATCH "1")
 
-set(PROJECT_VERSION "${SIMPLEPARSER_VERSION_MAJOR}.${SIMPLEPARSER_VERSION_MINOR}.${SIMPLEPARSER_VERSION_PATCH}")
+set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
-#Adding cmake functions like feature_summary()
 include(FeatureSummary)
 include(GNUInstallDirs)
 
-# yes we mean it for all targets
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
 
-#Find dependecies
 find_package(Qt5 COMPONENTS Core Network Gui Widgets CONFIG REQUIRED)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    simplecmdiobaseConfigVersion.cmake
+    VERSION ${PACKAGE_VERSION}
+    COMPATIBILITY SameMajorVersion
+    )
+
+configure_file("src/simplecmdiobaseConfig.cmake.in" simplecmdiobaseConfig.cmake @ONLY)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/simplecmdiobaseConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/simplecmdiobaseConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simplecmdiobase
+    )
+
+install(EXPORT simplecmdiobase
+    FILE simplecmdiobaseTargets.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/simplecmdiobase
+    )
+
 
 add_subdirectory(src)
