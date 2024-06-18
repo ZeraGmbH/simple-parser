@@ -8,7 +8,6 @@ class TestCmdIoParser : public QSimpleCmdParserSocketBase
 {
     Q_OBJECT
 public:
-    explicit TestCmdIoParser(QObject *parent = nullptr);
     void add(QString cmd, CmdParamTypeIdList params, bool cmdOk, QString cmdInfoReturned);
 private:
     QString GetParserName() override;

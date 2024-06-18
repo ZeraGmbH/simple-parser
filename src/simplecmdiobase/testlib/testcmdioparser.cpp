@@ -1,14 +1,8 @@
 #include "testcmdioparser.h"
 
-TestCmdIoParser::TestCmdIoParser(QObject *parent)
-    : QSimpleCmdParserSocketBase{parent}
-{
-}
-
 void TestCmdIoParser::add(QString cmd, CmdParamTypeIdList params, bool cmdOk, QString cmdInfoReturned)
 {
-    CommandReturnInfo info = { cmdOk, cmdInfoReturned };
-    m_commandInfos.append(info);
+    m_commandInfos.append({ cmdOk, cmdInfoReturned });
     AddCmdInfo(cmd, params, m_commandInfos.count()-1);
 }
 

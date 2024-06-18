@@ -37,7 +37,7 @@ void test_task_simpleio::failInvalidSocket()
 void test_task_simpleio::failInvalidCommand()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), true, "");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoFacade::RESULT_OK, "");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "FooCmd", testTimeout);
@@ -52,7 +52,7 @@ void test_task_simpleio::failInvalidCommand()
 void test_task_simpleio::passCommand()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), true, "");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoFacade::RESULT_OK, "");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "TestCmd", testTimeout);
@@ -64,10 +64,25 @@ void test_task_simpleio::passCommand()
     QCOMPARE(spy[0][0], true);
 }
 
-void test_task_simpleio::failErrorMessageSet()
+void test_task_simpleio::failParser()
 {
     setupServer();
-    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), false, "42");
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoFacade::RESULT_ERROR_PARSER, "42");
+    setupOpenClient();
+
+    TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "TestCmd", testTimeout);
+    QSignalSpy spy(taskSendReceive.get(), &TaskSimpleSendReceive::sigFinish);
+    taskSendReceive->start();
+    TimeMachineObject::feedEventLoop();
+
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spy[0][0], false);
+}
+
+void test_task_simpleio::failHandler()
+{
+    setupServer();
+    m_simpleServer->addCmd("TestCmd", CmdParamTypeIdList(), TestCmdIoFacade::RESULT_ERROR_HANDLER, "42");
     setupOpenClient();
 
     TaskTemplatePtr taskSendReceive = TaskSimpleSendReceive::create(m_clientSocket, "TestCmd", testTimeout);
