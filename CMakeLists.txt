@@ -15,6 +15,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
 
 find_package(Qt5 COMPONENTS Core Network Gui Widgets CONFIG REQUIRED)
 find_package(ZenuxCore REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(Systemd REQUIRED libsystemd)
 
 enable_testing()
 # Inspired by
