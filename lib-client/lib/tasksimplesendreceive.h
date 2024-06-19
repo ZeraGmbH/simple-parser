@@ -12,8 +12,6 @@ public:
     static TaskTemplatePtr create(std::shared_ptr<QTcpSocket> socket, QString cmd, int timeout, std::function<void()> additionalErrorHandler = []{});
     TaskSimpleSendReceive(std::shared_ptr<QTcpSocket> socket, QString cmd);
     void start() override;
-signals:
-    void sigInfoReceived(QString strInfo);
 private slots:
     void onReadyRead();
 private:

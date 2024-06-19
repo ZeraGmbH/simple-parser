@@ -10,7 +10,7 @@ public:
     explicit SimpleCmdIoClient(int portNo);
     void startCmd(QString cmd);
 signals:
-    void sigCmdFinish(bool ok, QString returnedString);
+    void sigCmdFinish(bool ok);
 private:
     int m_portNo;
 };
