@@ -12,4 +12,5 @@ endfunction()
 
 SETUP_SIMPLE_PARSER_CLIENT_TESTS(
     test_task_open
+    test_simplecmdioclient
 )
