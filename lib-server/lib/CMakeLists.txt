@@ -29,9 +29,10 @@ target_link_libraries (simplecmdiobase
     PUBLIC
     Qt5::Core
     Qt5::Network
-    systemd
     # ask linker to help us finding unresolved symbols
     "-Wl,--no-undefined"
+    PRIVATE
+    systemd
 )
 
 target_include_directories(simplecmdiobase
