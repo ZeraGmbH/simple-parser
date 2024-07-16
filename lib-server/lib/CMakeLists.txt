@@ -17,7 +17,7 @@ set(SOURCES
     cmdserver.cpp
 )
 
-add_library(simplecmdiobase SHARED
+add_library(simplecmdiobase STATIC
     ${HEADERS}
     ${SOURCES}
 )
