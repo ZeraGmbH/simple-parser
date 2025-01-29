@@ -6,6 +6,7 @@ function(SETUP_SIMPLE_PARSER_CLIENT_TESTS)
             simplecmdiobase
             simplecmdio-client
             simplecmdio-testlib
+            Zera::testlib-common
         )
     endforeach()
 endfunction()
@@ -13,4 +14,9 @@ endfunction()
 SETUP_SIMPLE_PARSER_CLIENT_TESTS(
     test_task_open
     test_simplecmdioclient
+)
+
+target_sources(test_simplecmdioclient
+    PRIVATE
+    test-data/regression_data.qrc
 )

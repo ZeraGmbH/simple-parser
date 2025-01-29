@@ -15,6 +15,7 @@ private slots:
     void cmdInvalidServer();
     void cmdInvalid();
     void cmdOk();
+    void cmdTransparentHelp();
 
 private:
     void setupServer();

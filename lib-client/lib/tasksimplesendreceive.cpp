@@ -19,7 +19,7 @@ TaskSimpleSendReceive::TaskSimpleSendReceive(std::shared_ptr<QTcpSocket> socket,
 void TaskSimpleSendReceive::start()
 {
     if(!m_socket->isOpen()) {
-        emit sigFinish(false, getTaskId());
+        finishTask(false);
         return;
     }
     m_socket->write(m_cmd.toLatin1() + END_STR);
@@ -38,14 +38,14 @@ void TaskSimpleSendReceive::decodeResponse()
     QString bareResponse = m_serverResponse.replace(END_STR, "");
     QStringList responseParts = bareResponse.split(",");
     if(responseParts.count() < 2)
-        emit sigFinish(false, getTaskId());
+        finishTask(false);
 
     else if(responseParts[1].toUpper().startsWith("ERROR"))
-        emit sigFinish(false, getTaskId());
+        finishTask(false);
 
     else if(responseParts[1].toUpper().startsWith(("OK")))
-        emit sigFinish(true, getTaskId());
+        finishTask(true);
 
     else
-        emit sigFinish(false, getTaskId());
+        finishTask(false);
 }

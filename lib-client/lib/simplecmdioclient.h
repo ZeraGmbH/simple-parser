@@ -11,9 +11,14 @@ class SimpleCmdIoClient : public QObject
 public:
     explicit SimpleCmdIoClient(QString ip, int portNo, int timeout);
     void startCmd(QString cmd);
+    void startCmdTransparent(const QString &cmd, std::shared_ptr<QString> response);
 signals:
     void sigCmdFinish(bool ok);
 private:
+    void prepareIoTask();
+    void addOpenConnectionTask();
+    void addSendReceiveTask(TaskTemplatePtr task);
+    void addCloseConnectionTask();
     QString m_ip;
     int m_portNo;
     int m_timeout;

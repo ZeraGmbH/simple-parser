@@ -1,8 +1,8 @@
 #include "test_simplecmdioclient.h"
 #include "simplecmdioclient.h"
-
 #include <timemachinefortest.h>
 #include <timerfactoryqtfortest.h>
+#include <testloghelpers.h>
 #include <QSignalSpy>
 #include <QTest>
 
@@ -62,6 +62,26 @@ void test_simplecmdioclient::cmdOk()
     TimeMachineForTest::getInstance()->processTimers(testTimeout);
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spy[0][0], true);
+}
+
+void test_simplecmdioclient::cmdTransparentHelp()
+{
+    setupServer();
+    QString testCmd = "TestCmd";
+    m_simpleServer->addCmd(testCmd, CmdParamTypeIdList(), TestCmdIoCompleteServer::RESULT_OK, "42");
+
+    SimpleCmdIoClient client("127.0.0.1", testPort, testTimeout);
+    QSignalSpy spy(&client, &SimpleCmdIoClient::sigCmdFinish);
+    std::shared_ptr<QString> serverResponse = std::make_shared<QString>();
+    client.startCmdTransparent("?", serverResponse);
+
+    TimeMachineForTest::getInstance()->processTimers(testTimeout);
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spy[0][0], true);
+
+    QString expected = TestLogHelpers::loadFile(":/help-response.txt");
+    QVERIFY(!expected.isEmpty());
+    QVERIFY(TestLogHelpers::compareAndLogOnDiff(expected, *serverResponse));
 }
 
 void test_simplecmdioclient::setupServer()
