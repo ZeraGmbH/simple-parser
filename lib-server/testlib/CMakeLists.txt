@@ -6,7 +6,7 @@ file(GLOB HEADER
     *.h
     )
 
-add_library(simplecmdio-testlib SHARED
+add_library(simplecmdio-testlib STATIC
     ${SOURCES}
     ${HEADER}
 )
