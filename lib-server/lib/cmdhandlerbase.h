@@ -2,9 +2,8 @@
 #define CMDHANDLERBASE_H
 
 #include "cmdparserbase.h"
-#include "simplecmdiobase_export.h"
 
-class SIMPLECMDIOBASE_EXPORT QSimpleCmdHandlerBase : public QObject
+class QSimpleCmdHandlerBase : public QObject
 {
     Q_OBJECT
 public:

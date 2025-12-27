@@ -3,7 +3,9 @@
 #include "cmdparserbase.h"
 
 QSimpleCmdClient::QSimpleCmdClient(QObject *parent, QTcpSocket* pSocket, QSimpleCmdParserSocketBase *pCmdParser) :
-    QObject(parent), m_pSocket(pSocket), m_pCmdParser(pCmdParser)
+    QObject(parent),
+    m_pSocket(pSocket),
+    m_pCmdParser(pCmdParser)
 {
     connect(m_pSocket, &QTcpSocket::readyRead, this, &QSimpleCmdClient::OnReceive);
     connect(m_pCmdParser, &QSimpleCmdParserSocketBase::CmdFinish, this, &QSimpleCmdClient::OnCmdFinish);

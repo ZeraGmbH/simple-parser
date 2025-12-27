@@ -1,14 +1,12 @@
 #ifndef SIMPLECMDCLIENT_H
 #define SIMPLECMDCLIENT_H
 
+#include "cmdparserbase.h"
 #include <QObject>
-#include "simplecmdiobase_export.h"
+#include <QTcpSocket>
+#include <QIODevice>
 
-class QTcpSocket;
-class QSimpleCmdParserSocketBase;
-class QIODevice;
-
-class SIMPLECMDIOBASE_EXPORT QSimpleCmdClient: public QObject
+class QSimpleCmdClient: public QObject
 {
     Q_OBJECT
 public:
