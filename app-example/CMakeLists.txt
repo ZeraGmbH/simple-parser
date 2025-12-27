@@ -19,9 +19,9 @@ add_executable(simpleexample
 target_link_libraries (simpleexample
     PUBLIC
     simplecmdiobase
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
+    ${QTX}::Core
+    ${QTX}::Gui
+    ${QTX}::Widgets
 )
 
 install(TARGETS simpleexample

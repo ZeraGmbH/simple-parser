@@ -19,8 +19,8 @@ target_include_directories(simplecmdio-client
 
 target_link_libraries(simplecmdio-client
     PUBLIC
-    Qt5::Core
-    Qt5::Network
+    ${QTX}::Core
+    ${QTX}::Network
     Zera::zera-tasks-base
     )
 
