@@ -13,7 +13,7 @@ add_executable(simpleautorun
 
 target_link_libraries(simpleautorun
     PUBLIC
-    Qt5::Core
+    ${QTX}::Core
     simpleautorunlib
     )
 

@@ -12,9 +12,10 @@ include(FeatureSummary)
 include(GNUInstallDirs)
 include(GenerateExportHeader)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+set(QT_MAJOR_VER "5" CACHE STRING "Qt major version")
+set(QTX "Qt${QT_MAJOR_VER}")
 
-find_package(Qt5 COMPONENTS Core Network Gui Widgets CONFIG REQUIRED)
+find_package(${QTX} COMPONENTS Core Network Gui Widgets CONFIG REQUIRED)
 find_package(ZenuxCore REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(Systemd REQUIRED libsystemd)
@@ -36,7 +37,7 @@ function(SETUP_TESTS)
             )
         target_link_libraries(${_testname}
             PUBLIC
-            Qt5::Test
+            ${QTX}::Test
             Zera::zera-timers-testlib
             )
     endforeach()
@@ -66,4 +67,3 @@ add_subdirectory(app-autorun)
 add_subdirectory(app-example)
 add_subdirectory(lib-client)
 add_subdirectory(lib-server)
-

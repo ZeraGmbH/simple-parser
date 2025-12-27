@@ -1,5 +1,3 @@
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 set(HEADERS
     cmdparserbase.h
     cmdclient.h
@@ -27,8 +25,8 @@ set_target_properties(simplecmdiobase PROPERTIES SOVERSION ${PROJECT_VERSION_MAJ
 
 target_link_libraries (simplecmdiobase
     PUBLIC
-    Qt5::Core
-    Qt5::Network
+    ${QTX}::Core
+    ${QTX}::Network
     # ask linker to help us finding unresolved symbols
     "-Wl,--no-undefined"
     PRIVATE
