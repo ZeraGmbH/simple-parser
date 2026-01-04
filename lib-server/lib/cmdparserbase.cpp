@@ -291,9 +291,16 @@ const QString QSimpleCmdParserBase::FormatErrorMsg(QString strCmd, QString strEr
   */
 bool QSimpleCmdParserBase::isValidHexValue(QString strParam, int iMaxLen)
 {
+    bool bValidHexValue = true;
+    // length
     if((strParam.length() % 2) || (iMaxLen > 0 && strParam.length() > iMaxLen) || strParam.length() <= 0)
-        return false;
-    return true;
+        bValidHexValue = false;
+    // correct hex
+    else {
+        for(int iByte=0; iByte<strParam.length()/2 && bValidHexValue; iByte++)
+            strParam.mid(iByte*2, 2).toInt(&bValidHexValue, 16);
+    }
+    return bValidHexValue;
 }
 
 /**
